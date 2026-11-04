@@ -5,7 +5,9 @@
 # Principle: white paper, black ink, very few colours. Colour only marks what
 # needs attention:
 #   green   #86B29C  VKM green (PMS 624c): rule under the pest name, active tab, primary action
-#   caution #F39800  warnings, and (as its 30% tint) hosts with uncertain records
+#   caution #F39800  warnings only
+# The uncertainty column is a single green gradient: the better documented a
+# host is in Norway, the stronger the green.
 # Everything else is neutral greys from the VKM palette.
 # www/vkm.css holds the colour-free layout and type rules.
 # =============================================================================
@@ -17,8 +19,8 @@ VKM_COLOURS <- list(
   hairline  = "#CFCFCA",   # borders, dividers
   mist      = "#E9EBE8",   # table striping, footer
   accent    = "#86B29C",   # VKM green (PMS 624c): brand accent + primary action
-  caution   = "#F39800",   # warnings
-  caution30 = "#FBE0B2"    # VKM 30 % tint of caution: uncertain hosts
+  accent30  = "#DAE7E1",   # VKM 30 % tint of the green: documentation gradient
+  caution   = "#F39800"    # warnings only
 )
 
 hm_theme <- function(col = VKM_COLOURS) {
@@ -118,13 +120,13 @@ hm_pest_heading <- function(name, norwegian = NA, code = NA, gbif_key = NA, n_ho
       stat(n_est, "established in Norway (Artsdatabanken)")))
 }
 
-#' Uncertainty highlighting in the table: colour only where caution is needed.
-#' High = caution tint, moderate = half of it, low / not documented = no fill.
+#' Uncertainty highlighting in the table: one green gradient from VKM green and
+#' its 30 % tint. Stronger green = better documented; not documented = no fill.
 uncertainty_fill <- function(col = VKM_COLOURS) {
   c("Not documented in Norway" = col$paper,
-    "High uncertainty"         = col$caution30,
-    "Moderate uncertainty"     = paste0(col$caution30, "80"),
-    "Low uncertainty"          = col$paper)
+    "High uncertainty"         = paste0(col$accent30, "99"),   # 60 % of the tint
+    "Moderate uncertainty"     = col$accent30,
+    "Low uncertainty"          = paste0(col$accent, "B3"))     # 70 % of VKM green
 }
 
 #' HTML legend for the map: one row per class with a colour dot, label and count.
