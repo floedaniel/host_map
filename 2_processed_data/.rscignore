@@ -1,0 +1,5 @@
+cache
+validation_hosts.rds
+validation_pest_hosts.rds
+validation_analysis.log
+validation_collect.log
