@@ -1,20 +1,37 @@
-/* VKM look: black text everywhere, layout. Colours are set in 4_scripts/theme.R */
-body, .btn, .navbar, .nav-link, .card-header, .badge, .alert,
-.bslib-value-box, .value-box-title, .value-box-value, .accordion-button,
-table.dataTable thead th, .vkm-footer, .vkm-header { color: #000 !important; }
+/* VKM layout and spacing (matches the v2 mockup). Colours: 4_scripts/theme.R */
+body, .btn, .navbar, .card-header, .badge, .alert, .vkm-footer { color: #000 !important; }
+body { font-size: 15px; line-height: 1.5; }
 
-.vkm-header { display: flex; align-items: center; gap: 1.25rem; padding: 12px 24px; }
-.vkm-logo   { height: 60px; width: auto; margin: 4px 8px 4px 0; }
-.vkm-title h1 { font-size: 1.6rem; margin: 0; font-weight: 600; }
-.vkm-subtitle { font-size: 0.95rem; }
-.vkm-navbar .nav-link { font-weight: 500; }
-.vkm-footer { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 8px 24px; }
+/* header: logo | divider | title */
+.vkm-header { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 20px 28px 14px; }
+.vkm-logo   { height: 60px; width: auto; display: block; }
+.vkm-sep    { width: 1px; height: 44px; }
+.vkm-t      { font-size: 24px; font-weight: 700; letter-spacing: .2px; }
+.vkm-subtitle { font-size: 13px; }
 
-/* Generous white space */
-.vkm-header { padding: 20px 32px; }
-.bslib-sidebar-layout > .main { padding: 28px 32px !important; }
-.bslib-sidebar-layout > .sidebar > .sidebar-content { padding: 24px !important; gap: 1.25rem; }
-.bslib-value-box { margin-bottom: 1.5rem; }
-.vkm-footer { padding: 14px 32px; }
-.vkm-navbar .navbar { padding-left: 16px; }
-.alert { margin-bottom: 1rem; }
+/* navbar */
+.vkm-navbar .navbar { padding: 0 28px !important; min-height: 0; }
+.vkm-navbar .navbar .container-fluid { padding: 0; }
+.vkm-navbar .navbar-nav { gap: 28px; }
+.vkm-navbar .nav-link { display: block; padding: 10px 0 7px !important; border-bottom: 0 !important; margin: 0 !important; }
+.vkm-navbar .navbar, .vkm-navbar .navbar-collapse, .vkm-navbar .navbar-nav { overflow: visible; }
+
+/* sidebar and main */
+.bslib-sidebar-layout > .sidebar > .sidebar-content { padding: 24px 24px 24px 28px !important; gap: 6px; }
+.sidebar .control-label, .sidebar label.form-label { font-size: 13px; margin-top: 10px; }
+.form-control, .form-select { border-radius: 6px; padding: 9px 11px; font-size: 14px; }
+.bslib-sidebar-layout > .main { padding: 24px 28px !important; gap: 22px; }
+.sidebar .btn { border-radius: 6px; padding: 10px; margin-top: 8px; }
+.sidebar .btn.btn-primary { margin-top: 18px; padding: 11px; }
+.sidebar hr { display: none; }
+
+/* tiles, cards, alerts */
+.bslib-value-box { margin-bottom: 0; }
+.bslib-value-box .value-box-title { font-size: 13px; }
+.bslib-value-box .value-box-value { font-size: 28px; font-weight: 700; }
+.alert { padding: 10px 14px; }
+
+/* footer */
+.vkm-footer { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; padding: 14px 28px; }
+.vkm-footer a { color: #000; }
+.vkm-header .vkm-logo { height: 58px; margin-right: 4px; }

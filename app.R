@@ -73,10 +73,10 @@ REFERENCE <- tryCatch({
 ui <- page(
   theme = hm_theme(),
   tags$head(tags$link(rel = "stylesheet", href = "vkm.css")),
-  vkm_header("Host Map", "Host plants of plant pests and their documentation in Norway"),
+  vkm_header("Host Map", "FinnPRIO · Host plants of plant pests and their documentation in Norway"),
   div(class = "vkm-navbar", navset_bar(id = "tabs", bg = VKM_COLOURS$background, fillable = FALSE,
-  sidebar = sidebar(width = 340, bg = VKM_COLOURS$background,
-    textInput("pest", "Pest species (scientific name or EPPO code)", "Erwinia amylovora"),
+  sidebar = sidebar(width = 300, bg = VKM_COLOURS$background,
+    textInput("pest", "Pest species (scientific name or EPPO code)", "", placeholder = "Species"),
     actionButton("go", "Search", class = "btn-primary w-100"),
     hr(),
     checkboxGroupInput("cats", "EPPO host categories", choices = NULL),
@@ -132,6 +132,7 @@ server <- function(input, output, session) {
   # Step 1: resolve pest -> EPPO hosts -> GBIF summaries (heavy, cached)
   observeEvent(input$go, {
     rv$messages <- character(0); rv$pest <- NULL
+    if (!nzchar(trimws(input$pest))) { rv$messages <- "Enter a species name (e.g. Erwinia amylovora) or an EPPO code (e.g. ERWIAM)."; return() }
     if (!nzchar(EPPO_API_KEY)) {
       rv$messages <- "EPPO API key is missing. Set EPPO_API_KEY at the top of app.R or as an environment variable. Register at https://data.eppo.int/."
       return()
@@ -226,7 +227,9 @@ server <- function(input, output, session) {
     d <- display_table()
     datatable(d, escape = setdiff(seq_along(d), match(c("GBIF", "Artskart"), names(d))),
               filter = "top", rownames = FALSE, selection = "multiple",
-              options = list(pageLength = 25, scrollX = TRUE, order = list(list(4, "desc"))))
+              class = "stripe hover", options = list(pageLength = 25, scrollX = TRUE, order = list(list(4, "desc")))) |>
+      formatStyle("Uncertainty class (documented occurrence)", fontWeight = "bold",
+                  backgroundColor = styleEqual(names(uncertainty_fill()), unname(uncertainty_fill())))
   })
 
   export_table <- reactive({
