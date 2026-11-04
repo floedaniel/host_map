@@ -194,7 +194,7 @@ resolve_with_author <- function(m, author) {
 
 # ---- Key-value cache helpers (shared by single and bulk paths) ---------------
 # Bump when matching/summary logic changes so stale cached results are not reused.
-HM_CACHE_VERSION <- "2026-11-04b"
+HM_CACHE_VERSION <- "2026-11-04c"
 .ckey <- function(...) paste0("k", rlang::hash(list(HM_CACHE_VERSION, ...)))
 .cache_get <- function(...) {
   if (is.null(.hm$cache)) hm_init_cache()
@@ -267,15 +267,19 @@ eppo_resolve <- function(input, gbif = NULL, api_key) {
 .summary_from_parts <- function(total, basis, years, n_counties)
   list(total = as.integer(total %||% 0), basis = basis, years = years, n_counties = as.integer(n_counties))
 
+# Counts, years and counties all refer to the same records: the basisOfRecord
+# values in GBIF_BASIS_COUNTED (everything except living and fossil specimens),
+# OR-ed in one request. rgbif::occ_search() would split multiple basisOfRecord
+# values into separate requests, so the GBIF API is called directly here
+# (same endpoint, limit = 0, facets only).
+.summary_query <- function(taxonKey, country = "NO")
+  list(taxonKey = taxonKey, country = country, basisOfRecord = GBIF_BASIS_COUNTED, limit = 0,
+       facet = c("basisOfRecord", "year", "gadmLevel1Gid"), facetLimit = 500)
+
 .gbif_no_summary_impl <- function(taxonKey, country = "NO") {
-  r <- rgbif::occ_search(taxonKey = taxonKey, country = country, limit = 0,
-                         facet = c("basisOfRecord", "year", "gadmLevel1Gid"),
-                         facetLimit = 500)
-  f <- r$facets
-  basis <- if (!is.null(f$basisOfRecord) && nrow(f$basisOfRecord)) setNames(f$basisOfRecord$count, f$basisOfRecord$name) else integer(0)
-  yrs <- if (!is.null(f$year) && nrow(f$year)) as.integer(f$year$name) else integer(0)
-  gadm <- f[[grep("gadm", names(f), value = TRUE)[1] %||% "none"]]
-  .summary_from_parts(r$meta$count, basis, yrs, if (is.null(gadm)) 0L else nrow(gadm))
+  r <- req_perform(.gbif_req("/occurrence/search", .summary_query(taxonKey, country)))
+  if (resp_status(r) != 200) stop("GBIF occurrence search failed (HTTP ", resp_status(r), ")")
+  .summary_from_json(resp_body_string(r))
 }
 
 # Same summary from the raw GBIF v1 occurrence/search JSON (bulk path)
@@ -315,11 +319,11 @@ summary_row <- function(s, basis_keep = GBIF_BASIS_ALL) {
 # ---- Classification ----------------------------------------------------------
 
 #' Uncertainty class for documented occurrence, from the record count.
-#' Default thresholds are the calibrated values from the validation
-#' (5_outputs/REPORT.md): P(host really present in Norway) = 0.95 at the
-#' high/moderate boundary and 0.99 at the moderate/low boundary.
-HM_T1 <- 12L   # 1..12 records   -> high uncertainty
-HM_T2 <- 37L   # 13..37 records  -> moderate uncertainty; >= 38 -> low uncertainty
+#' Default thresholds come from the validation (5_outputs/REPORT.md): the
+#' calibrated boundaries (P(host really present in Norway) = 0.95 and 0.99 at
+#' 12.8 and 37.7 records) rounded to 15 and 40, where P = 0.96 and 0.99.
+HM_T1 <- 15L   # 1..15 records   -> high uncertainty
+HM_T2 <- 40L   # 16..40 records  -> moderate uncertainty; >= 41 -> low uncertainty
 classify_count <- function(n, t1 = HM_T1, t2 = HM_T2) {
   out <- ifelse(is.na(n), NA_character_,
          ifelse(n == 0, COUNT_CLASS_LEVELS[1],
@@ -613,8 +617,7 @@ prefetch_gbif <- function(names, kingdom = "Plantae", max_active = 4, country = 
   keys <- unique(na.omit(vapply(names, function(n) .cache_get("match", n, kingdom)$acceptedKey %||% NA_character_, "")))
   keys <- keys[vapply(keys, function(k) is.null(.cache_get("nosum", k, country)), TRUE)]
   if (length(keys)) {
-    reqs <- lapply(keys, function(k) .gbif_req("/occurrence/search", list(taxonKey = k, country = country, limit = 0,
-                      facet = c("basisOfRecord", "year", "gadmLevel1Gid"), facetLimit = 500)))
+    reqs <- lapply(keys, function(k) .gbif_req("/occurrence/search", .summary_query(k, country)))
     resp <- .perform_bulk(reqs, max_active, progress, "counts")
     for (i in seq_along(keys)) {
       txt <- .ok_body(resp[[i]]); if (is.null(txt)) next

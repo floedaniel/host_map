@@ -36,7 +36,7 @@ rsconnect::deployApp(appFiles = c("app.R", ".Renviron", "4_scripts/hostmap_funct
 | Resolve the pest name and synonyms | GBIF Backbone (`rgbif::name_backbone`) |
 | Pest → EPPO code → EPPO preferred name → host list with categories | EPPO GD API v2 |
 | Host → GBIF taxon → Norwegian record count, years, counties, basisOfRecord | GBIF `occurrence/search` (`limit = 0`, facets) |
-| Uncertainty class for documented occurrence: 0 / 1–12 / 13–37 / ≥ 38 records | Calibrated in `5_outputs/REPORT.md` |
+| Uncertainty class for documented occurrence: 0 / 1–15 / 16–40 / ≥ 41 records | Calibrated in `5_outputs/REPORT.md` |
 | Status in Norwegian nature (a separate concept) | Artsdatabanken (shipped table) |
 | Map: key-free tiles (Esri light grey default) | GBIF points, capped, precision-filtered and de-duplicated |
 | Export | CSV and Excel (with a settings sheet) |

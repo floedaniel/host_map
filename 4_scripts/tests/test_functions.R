@@ -9,8 +9,8 @@ key <- Sys.getenv("EPPO_API_KEY")
 test_that("count classification follows thresholds", {
   x <- classify_count(c(0, 1, 10, 11, 50, 51, NA), 10, 50)
   expect_equal(as.character(x), c(COUNT_CLASS_LEVELS[c(1, 2, 2, 3, 3, 4)], NA))
-  # calibrated defaults: 1-12 high, 13-37 moderate, >= 38 low
-  y <- classify_count(c(0, 12, 13, 37, 38))
+  # defaults: 1-15 high, 16-40 moderate, >= 41 low
+  y <- classify_count(c(0, 15, 16, 40, 41))
   expect_equal(as.character(y), COUNT_CLASS_LEVELS[c(1, 2, 3, 3, 4)])
   expect_false("LIVING_SPECIMEN" %in% GBIF_BASIS_COUNTED)
 })
@@ -23,11 +23,13 @@ test_that("bulk JSON parsers match the rgbif path", {
     expect_equal(a$acceptedKey, b$acceptedKey, info = nm)
     expect_equal(a$gbif_canonical, b$gbif_canonical, info = nm)
   }
-  txt <- httr2::resp_body_string(httr2::req_perform(.gbif_req("/occurrence/search",
-           list(taxonKey = 3001244, country = "NO", limit = 0, facet = c("basisOfRecord", "year", "gadmLevel1Gid"), facetLimit = 500))))
-  j <- .summary_from_json(txt); r <- .gbif_no_summary_impl("3001244")
-  expect_equal(j$total, r$total); expect_equal(sort(j$basis), sort(r$basis))
-  expect_equal(sort(j$years), sort(r$years)); expect_equal(j$n_counties, r$n_counties)
+  # summary counts only the counted record types, and years/counties refer to the same records
+  s <- .gbif_no_summary_impl("3001244")
+  expect_false(any(c("LIVING_SPECIMEN", "FOSSIL_SPECIMEN") %in% names(s$basis)))
+  expect_equal(s$total, sum(s$basis))
+  all_types <- rgbif::occ_search(taxonKey = 3001244, country = "NO", limit = 0)$meta$count
+  expect_lt(s$total, all_types)
+  expect_gt(length(s$years), 20); expect_gt(s$n_counties, 5)
 })
 
 test_that("points query ORs basisOfRecord and respects the cap", {

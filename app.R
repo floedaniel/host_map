@@ -13,10 +13,10 @@ EPPO_API_KEY <- Sys.getenv("EPPO_API_KEY", unset = "")
 # Uncertainty classification: FIXED, chosen by the statistical validation in
 # 5_outputs/REPORT.md (do not change without re-running 4_scripts/02_*.R).
 #   records counted = all basisOfRecord except LIVING_SPECIMEN and FOSSIL_SPECIMEN
-#   0 = not documented | 1-12 = high | 13-37 = moderate | >= 38 = low uncertainty
-#   (12 and 37 are where P(host really present in Norway) reaches 0.95 and 0.99)
-UNCERTAINTY_T1 <- 12L
-UNCERTAINTY_T2 <- 37L
+#   0 = not documented | 1-15 = high | 16-40 = moderate | >= 41 = low uncertainty
+#   (calibrated 12.8 / 37.7 records for P(present) = 0.95 / 0.99, rounded to 15 / 40)
+UNCERTAINTY_T1 <- 15L
+UNCERTAINTY_T2 <- 40L
 
 # Map
 MAP_MAX_UNCERTAINTY_M <- 1000     # drop points with coordinate uncertainty above this
@@ -244,7 +244,7 @@ server <- function(input, output, session) {
         value = c(rv$pest$eppo$prefname %||% input$pest, rv$pest$eppo$code %||% "", as.character(Sys.time()),
                   paste(GBIF_BASIS_COUNTED, collapse = "; "),
                   sprintf("0 not documented; 1-%d high; %d-%d moderate; >=%d low", UNCERTAINTY_T1, UNCERTAINTY_T1 + 1L, UNCERTAINTY_T2, UNCERTAINTY_T2 + 1L),
-                  "Thresholds calibrated so that P(present in Norway) = 0.95 / 0.99 at the class boundaries (see REPORT.md)"))
+                  "Thresholds: calibrated 12.8 / 37.7 records (P(present in Norway) = 0.95 / 0.99), rounded to 15 / 40 (see REPORT.md). Records, years and counties exclude living and fossil specimens."))
       writexl::write_xlsx(list(hosts = export_table(), settings = meta), file)
     })
 

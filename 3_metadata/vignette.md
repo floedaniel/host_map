@@ -24,7 +24,7 @@ Each row is one EPPO host. The columns:
 |---|---|
 | Host plant (EPPO), EPPO category | Name and category exactly as in the EPPO Global Database |
 | GBIF name, Match note | The accepted GBIF taxon used for counting. The note flags synonyms, ambiguous names and names that could not be matched |
-| Records in Norway, Distinct years, Counties | GBIF records from Norway (all record types except botanic-garden living specimens and fossils) |
+| Records in Norway, Distinct years, Counties | GBIF records from Norway (all record types except botanic-garden living specimens and fossils); all three columns describe the same records |
 | **Uncertainty class** | How sure we can be that the host **occurs** in Norway, judged from the records |
 | **Status in Norwegian nature** | Artsdatabanken's assessment of whether it is **established** |
 | GBIF, Artskart | Links to the records |
@@ -34,9 +34,9 @@ The uncertainty classes are calibrated against Artsdatabanken's lists (see `5_ou
 | Class | Records | Of such hosts, share actually absent from Norway |
 |---|---|---|
 | Not documented in Norway | 0 | — |
-| High uncertainty | 1–12 | about 30% |
-| Moderate uncertainty | 13–37 | about 5% |
-| Low uncertainty | ≥ 38 | < 2% |
+| High uncertainty | 1–15 | about 30% |
+| Moderate uncertainty | 16–40 | low (0 of 20 in the validation; upper 95% limit 16%) |
+| Low uncertainty | ≥ 41 | < 2% |
 
 **How to read the example.**
 

@@ -6,7 +6,7 @@
 
 * The app is feasible with open APIs: **EPPO GD API v2** for host lists (free key), **GBIF** for names and Norwegian record counts (no key), and **Artsdatabanken** for status in Norwegian nature (no key).
 * A host's GBIF record count in Norway is a good measure of **documented occurrence**. It is not a reliable measure of **establishment**, because crops and casual aliens (oats, barley, potato, sunflower, flax) have hundreds of records without being established. The app therefore shows the two concepts in separate columns, and takes establishment directly from Artsdatabanken.
-* The classes were recalibrated against known presence in Norway. The new boundaries are where the probability that a host really occurs in Norway reaches 0.95 and 0.99. This gives **0 / 1–12 / 13–37 / ≥ 38 records**, replacing 0 / 1–10 / 11–50 / > 50.
+* The classes were recalibrated against known presence in Norway. The new boundaries are where the probability that a host really occurs in Norway reaches 0.95 and 0.99. The calibrated values (12.8 and 37.7 records) are rounded to **0 / 1–15 / 16–40 / ≥ 41 records** for readability, replacing 0 / 1–10 / 11–50 / > 50.
 * Adding time (distinct years), space (counties), record type (human observation vs. specimen) or recency did **not** improve the classification of documented presence. The rule therefore stays count-only, and excludes living specimens (botanic gardens) and fossils.
 * The thresholds are fixed in the app. Users can no longer change them.
 
@@ -81,11 +81,11 @@ For listed hosts, the overall agreement of the ordinal reading (0 → absent, 1�
 
 Risk that a host in each class is actually absent from Norway (listed hosts, Wilson 95% CI):
 
-| Class | Original (10/50) | Calibrated (12/37) |
-|---|---|---|
-| High uncertainty | 15/46 = **33%** (21–47%) | 15/50 = **30%** (19–44%) |
-| Moderate uncertainty | 1/28 = **3.6%** (0.6–18%) | 1/19 = **5.3%** (0.9–25%) |
-| Low uncertainty | 0/177 = **0%** (0–2.1%) | 0/182 = **0%** (0–2.1%) |
+| Class | Original (10/50) | Calibrated (12/37) | **Adopted, rounded (15/40)** |
+|---|---|---|---|
+| High uncertainty | 15/46 = **33%** (21–47%) | 15/50 = **30%** (19–44%) | 16/52 = **31%** (20–44%) |
+| Moderate uncertainty | 1/28 = **3.6%** (0.6–18%) | 1/19 = **5.3%** (0.9–25%) | 0/20 = **0%** (0–16%) |
+| Low uncertainty | 0/177 = **0%** (0–2.1%) | 0/182 = **0%** (0–2.1%) | 0/179 = **0%** (0–2.1%) |
 
 Logistic calibration, P(present) = f(log10(count + 1)), n = 251 listed hosts with at least 1 record:
 
@@ -93,6 +93,8 @@ Logistic calibration, P(present) = f(log10(count + 1)), n = 251 listed hosts wit
 |---|---|---|---|
 | High → moderate | 0.95 | 12.8 | 5.0–26.5 |
 | Moderate → low | 0.99 | 37.7 | 9.1–120 |
+
+The rounded boundaries lie well inside both CIs. The fitted P(present) is 0.96 at 15 records and 0.99 at 40. The only absent host in the 13–37 range (*Hydrangea paniculata*, 15 records) falls into "high uncertainty" with the rounded rule.
 
 ![](fig_presence_calibration.png)
 
@@ -133,18 +135,19 @@ The single-variable AUCs for presence are similar: count (excl. living) 0.954, c
 
 ## 4. Recommendations and changes made
 
-1. **Keep the classification count-based and calibrate it to explicit error rates.** The boundaries are where P(host present in Norway) = 0.95 and 0.99:
+1. **Keep the classification count-based and calibrate it to explicit error rates.** The boundaries are where P(host present in Norway) = 0.95 and 0.99 (12.8 and 37.7 records), rounded for readability:
    * **0** records: not documented.
-   * **1–12**: high uncertainty (about 30% of such hosts are actually absent).
-   * **13–37**: moderate uncertainty (about 5%).
-   * **≥ 38**: low uncertainty (< 2%).
+   * **1–15**: high uncertainty (about 30% of such hosts are actually absent).
+   * **16–40**: moderate uncertainty (0 of 20 absent in the validation; upper 95% limit 16%).
+   * **≥ 41**: low uncertainty (< 2%).
 
-   The original 10/50 lie inside the bootstrap CIs, so the change is a refinement with a stated probabilistic meaning, not a reversal.
+   The original 10/50, the calibrated 12.8/37.7 and the rounded 15/40 all lie inside the bootstrap CIs. The change is a refinement with a stated probabilistic meaning, not a reversal.
 2. **Count every basisOfRecord except LIVING_SPECIMEN and FOSSIL_SPECIMEN.** Botanic-garden accessions do not document occurrence in Norwegian nature.
 3. **Do not add years, counties, record type or recency to the presence classification.** They carry no information beyond the count in this validation set.
 4. **Do not infer establishment from GBIF.** The app shows Artsdatabanken's status as a separate column. If an establishment indicator is ever needed for unlisted taxa, the best GBIF-only rule found was "> 30 human observations" (balanced accuracy 0.84). That is too weak to replace the reference.
 5. **Changes to the app:**
-   * Thresholds and the basisOfRecord set are fixed constants (`UNCERTAINTY_T1 = 12`, `UNCERTAINTY_T2 = 37`, `GBIF_BASIS_COUNTED`) and are no longer user settings.
+   * Thresholds and the basisOfRecord set are fixed constants (`UNCERTAINTY_T1 = 15`, `UNCERTAINTY_T2 = 40`, `GBIF_BASIS_COUNTED`) and are no longer user settings.
+   * Records, distinct years and counties are taken from one GBIF request filtered to the counted record types, so the three columns describe the same records. In the validation data, years and counties still included living specimens. These make up a few percent of records (e.g. 64 of 2,481 for *Malus domestica*), and the added-variable tests were clearly non-significant, so the conclusions are unaffected.
    * The draft "revised" rule was removed.
    * The table caption and the Excel settings sheet state the classes and their meaning.
 

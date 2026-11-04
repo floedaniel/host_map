@@ -6,16 +6,16 @@
 
 ### Uncertainty class (documented occurrence)
 
-Records counted: every basisOfRecord except living specimens (botanic gardens) and fossils.
+Records counted: every basisOfRecord except living specimens (botanic gardens) and fossils. Records, distinct years and counties all refer to these same records.
 
 | Class | Records in Norway | Share of such hosts actually absent (validation) |
 |---|---|---|
 | Not documented in Norway | 0 | — |
-| High uncertainty | 1–12 | about 30% |
-| Moderate uncertainty | 13–37 | about 5% |
-| Low uncertainty | ≥ 38 | < 2% |
+| High uncertainty | 1–15 | about 30% |
+| Moderate uncertainty | 16–40 | low (0 of 20 in the validation; upper 95% limit 16%) |
+| Low uncertainty | ≥ 41 | < 2% |
 
-The boundaries are where the probability that the host really occurs in Norway reaches 0.95 and 0.99. They were estimated from 272 hosts of 20 pests with known Norwegian status (logistic calibration on log record count). Distinct years, counties, record type and recency added no information, so they are not used. The settings are fixed; see `5_outputs/REPORT.md`.
+The calibrated boundaries are where the probability that the host really occurs in Norway reaches 0.95 and 0.99 (12.8 and 37.7 records), rounded to 15 and 40 for readability (P = 0.96 and 0.99 there). They were estimated from 272 hosts of 20 pests with known Norwegian status (logistic calibration on log record count). Distinct years, counties, record type and recency added no information, so they are not used. The settings are fixed; see `5_outputs/REPORT.md`.
 
 ### Two separate concepts
 
