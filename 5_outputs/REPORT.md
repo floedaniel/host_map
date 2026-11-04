@@ -14,7 +14,7 @@
 
 | Requirement | Finding | Implementation |
 |---|---|---|
-| Name resolution, synonyms | `rgbif::name_backbone` resolves synonyms (e.g. *Agrilus marcopoli* → *A. planipennis*). For ambiguous synonyms GBIF falls back to a higher rank (e.g. *Picea excelsa* → Pinaceae). | The exact-match alternatives are inspected and the most frequent accepted species is chosen, with a note. A higher-rank match is never counted (otherwise a misspelt host would count all Pinaceae or Plantae records). |
+| Name resolution, synonyms | `rgbif::name_backbone` resolves synonyms (e.g. *Agrilus marcopoli* → *A. planipennis*). For homonyms GBIF falls back to a higher rank: *Prunus dulcis* has three old homonyms that point to *P. avium* (cherry) and one, (Mill.) D.A.Webb, that points to almond. | Homonyms are resolved with the **author citation EPPO gives the host** (abbreviation-tolerant surname match). If authorship does not settle it, the host is flagged and not counted; it is never guessed. A higher-rank match is never counted either (otherwise a misspelt host would count all *Prunus* or Plantae records). |
 | EPPO code from name | The EPPO v2 API has `tools/name2codes`. The older v1 REST API rejected this key. | The name is tried as entered, then the GBIF accepted name. An EPPO code can also be entered directly. The displayed pest name is the **EPPO preferred name** (`taxons/taxon/{code}/overview`), plus the Norwegian name. |
 | Host list and categories | `taxons/taxon/{code}/hosts` gives the category labels (Major host, Host, Minor host, Experimental, Incidental, Artificial, Wild/Weed, Doubtful host, …). | Categories are shown and filterable. The map defaults to Major hosts. |
 | API key | Required by EPPO. A missing or invalid key gives HTTP 401. | `EPPO_API_KEY` environment variable, read at the top of `app.R`, with a clear message if it is missing or rejected. |
@@ -25,15 +25,15 @@
 
 ## 2. Validation design
 
-* **Sample.** 20 pests relevant to Norway were chosen to span narrow to very wide host ranges: *Erwinia amylovora, Popillia japonica, Phytophthora ramorum, Agrilus planipennis, Xylella fastidiosa, Anoplophora glabripennis, A. chinensis, Bursaphelenchus xylophilus, Dendrolimus sibiricus, Thaumetopoea processionea, Lymantria dispar, Leptinotarsa decemlineata, Globodera rostochiensis, Ralstonia solanacearum, Synchytrium endobioticum, Aromia bungii, Phytophthora kernoviae, Bactrocera dorsalis, Spodoptera frugiperda, Ceratocystis platani*. They have 2,349 pest–host links and 1,867 unique host names. After keeping species-rank hosts and de-duplicating on GBIF taxon there are **1,567 hosts**.
+* **Sample.** 20 pests relevant to Norway were chosen to span narrow to very wide host ranges: *Erwinia amylovora, Popillia japonica, Phytophthora ramorum, Agrilus planipennis, Xylella fastidiosa, Anoplophora glabripennis, A. chinensis, Bursaphelenchus xylophilus, Dendrolimus sibiricus, Thaumetopoea processionea, Lymantria dispar, Leptinotarsa decemlineata, Globodera rostochiensis, Ralstonia solanacearum, Synchytrium endobioticum, Aromia bungii, Phytophthora kernoviae, Bactrocera dorsalis, Spodoptera frugiperda, Ceratocystis platani*. They have 2,349 pest–host links and 1,867 unique host names. After keeping species-rank hosts and de-duplicating on GBIF taxon there are **1,564 hosts**.
 * **Features per host.** GBIF records in Norway (excluding living and fossil specimens), human observations, preserved specimens, distinct years, counties (GADM level 1), and first and last year.
 * **Known status.** From Artsdatabanken, matched on the EPPO name, the GBIF name, and Norwegian synonyms via Nortaxa:
-  * *Established*: native or pre-1800 established, or alien class C2/C3. 217 hosts.
+  * *Established*: native or pre-1800 established, or alien class C2/C3. 216 hosts.
   * *Present, not established*: alien class B1/B2/C0/C1, or a non-established Red List category. 30 hosts.
   * *Absent*: door-knocker class A, or "no documented occurrence". 26 hosts.
-  * *Not listed*: 1,294 hosts, mostly exotic plants (*Coffea*, *Citrus*, tropical crops).
+  * *Not listed*: 1,292 hosts, mostly exotic plants (*Coffea*, *Citrus*, tropical crops).
 * **Two targets.**
-  1. *Documented presence in Norway* (established or present-not-established vs. absent; listed hosts only, n = 273). This is what the uncertainty class is meant to describe.
+  1. *Documented presence in Norway* (established or present-not-established vs. absent; listed hosts only, n = 272). This is what the uncertainty class is meant to describe.
   2. *Established in Norwegian nature* (established vs. all others). Three scenarios: A, all hosts with "not listed" counted as not established; B, only hosts with at least 1 record; C, listed hosts only.
 * **Comparison of rules.** Repeated stratified 5-fold cross-validation (10 × 5). Each rule's parameters were tuned on the training folds (maximising balanced accuracy) and scored on the held-out fold. Thresholds were estimated by logistic calibration on log10(count + 1), with 2,000 bootstrap resamples for CIs.
 
@@ -45,10 +45,10 @@ Scripts: `4_scripts/01_validation_collect.R`, `4_scripts/02_validation_analysis.
 
 | Original class | Absent | Present, not est. | Established | Not listed |
 |---|---|---|---|---|
-| Not documented (0) | 10 | 8 | 3 | 1,153 |
+| Not documented (0) | 10 | 8 | 3 | 1,151 |
 | High (1–10) | 15 | 15 | 16 | 73 |
 | Moderate (11–50) | 1 | 3 | 24 | 31 |
-| Low (> 50) | 0 | 4 | 174 | 37 |
+| Low (> 50) | 0 | 4 | 173 | 37 |
 
 For listed hosts, the overall agreement of the ordinal reading (0 → absent, 1–50 → present, > 50 → established) is **74%**, with a weighted κ of **0.64**.
 
@@ -61,7 +61,7 @@ For listed hosts, the overall agreement of the ordinal reading (0 → absent, 1�
 
 | Records | Hosts | Share established |
 |---|---|---|
-| 0 | 1,174 | 0.3% |
+| 0 | 1,172 | 0.3% |
 | 1–5 | 96 | 11% |
 | 6–10 | 23 | 22% |
 | 11–25 | 36 | 31% |
@@ -69,7 +69,7 @@ For listed hosts, the overall agreement of the ordinal reading (0 → absent, 1�
 | 51–100 | 34 | 38% |
 | 101–250 | 27 | 70% |
 | 251–500 | 28 | 71% |
-| 501–1000 | 21 | 86% |
+| 501–1000 | 20 | 85% |
 | > 1000 | 105 | 99% |
 
 * **For establishment**, errors are concentrated between **25 and 500 records**. Almost every high-count host that is not established is a cultivated crop or a casual alien. Examples: *Avena sativa* (1,313 records), *Helianthus annuus* (889), *Hordeum vulgare* (732), *Linum usitatissimum* (652), *Solanum tuberosum* (314), *Zea mays* (122). In the other direction, hosts with 10–45 records include established aliens such as *Abies balsamea*, *Prunus serotina*, *Pinus strobus* and *Acer negundo*.
@@ -85,14 +85,14 @@ Risk that a host in each class is actually absent from Norway (listed hosts, Wil
 |---|---|---|
 | High uncertainty | 15/46 = **33%** (21–47%) | 15/50 = **30%** (19–44%) |
 | Moderate uncertainty | 1/28 = **3.6%** (0.6–18%) | 1/19 = **5.3%** (0.9–25%) |
-| Low uncertainty | 0/178 = **0%** (0–2.1%) | 0/183 = **0%** (0–2.1%) |
+| Low uncertainty | 0/177 = **0%** (0–2.1%) | 0/182 = **0%** (0–2.1%) |
 
-Logistic calibration, P(present) = f(log10(count + 1)), n = 252 listed hosts with at least 1 record:
+Logistic calibration, P(present) = f(log10(count + 1)), n = 251 listed hosts with at least 1 record:
 
 | Boundary | Target P(present) | Records (point) | Bootstrap 95% CI |
 |---|---|---|---|
-| High → moderate | 0.95 | 12.8 | 4.7–25.7 |
-| Moderate → low | 0.99 | 37.7 | 8.6–116 |
+| High → moderate | 0.95 | 12.8 | 5.0–26.5 |
+| Moderate → low | 0.99 | 37.7 | 9.1–120 |
 
 ![](fig_presence_calibration.png)
 
@@ -105,23 +105,23 @@ Do other variables add information beyond the count? Likelihood-ratio tests agai
 | share of human observations | 0.83 | +2.0 |
 | last record ≥ 2000 | 0.012 | −4.4, but quasi-separation (all 16 absent hosts with records have a record from 2000 or later; SE ≈ 2,000), so not usable |
 
-The single-variable AUCs for presence are similar: count (excl. living) 0.954, count incl. living specimens 0.941, years 0.944, counties 0.942, human observations 0.936, preserved specimens 0.938. Excluding living specimens is slightly better than including them.
+The single-variable AUCs for presence are similar: count (excl. living) 0.954, count incl. living specimens 0.941, years 0.944, counties 0.942, human observations 0.936, preserved specimens 0.938. Excluding living specimens is slightly better than including them (0.954 vs 0.941).
 
 ### 3.4 Alternative rules for establishment (cross-validated balanced accuracy)
 
 | Rule | A: all hosts | B: hosts with ≥ 1 record | C: listed only |
 |---|---|---|---|
-| Count only, original t = 50 | 0.886 | 0.792 | 0.865 |
+| Count only, original t = 50 | 0.885 | 0.792 | 0.865 |
 | Count, tuned t | 0.943 (t = 1) | 0.813 (t = 100) | **0.902** (t = 20) |
-| Count + years | 0.939 | 0.812 | 0.900 |
-| Count + counties | 0.942 | 0.818 | 0.887 |
-| Count + years + counties | 0.939 | 0.816 | 0.884 |
-| Earlier draft rule (> 50 & ≥ 10 years & ≥ 2 counties) | 0.886 | 0.792 | 0.865 |
-| Counties only | 0.934 | 0.828 (≥ 10) | 0.887 |
-| Human observations only | 0.933 | **0.836** (> 30) | 0.862 |
-| Human > 30 and preserved > 3 | 0.924 | 0.830 | 0.859 |
-| Logistic, log count | 0.928 | 0.810 | 0.898 |
-| Logistic, log count + years + counties + preserved share | 0.930 | 0.824 | 0.882 |
+| Count + years | 0.940 | 0.811 | 0.899 |
+| Count + counties | 0.943 | 0.815 | 0.887 |
+| Count + years + counties | 0.940 | 0.817 | 0.884 |
+| Earlier draft rule (> 50 & ≥ 10 years & ≥ 2 counties) | 0.885 | 0.792 | 0.865 |
+| Counties only | 0.935 | 0.827 (≥ 10) | 0.886 |
+| Human observations only | 0.935 | **0.836** (> 30) | 0.858 |
+| Human > 20 and preserved > 3 | 0.923 | 0.829 | 0.859 |
+| Logistic, log count | 0.928 | 0.813 | 0.895 |
+| Logistic, log count + years + counties + preserved share | 0.932 | 0.823 | 0.878 |
 
 (The cross-validation SD of balanced accuracy is 0.01–0.05.)
 
@@ -151,6 +151,7 @@ The single-variable AUCs for presence are similar: count (excl. living) 0.954, c
 ## 5. Limitations
 
 * Only 26 known-absent hosts were available, so the thresholds have wide CIs. Adding more pests with temperate host lists would narrow them.
+* An earlier draft resolved homonyms by majority vote among the GBIF candidates, which mapped *Prunus dulcis* (almond) to cherry. The validation was re-run after switching to EPPO-authority resolution; the thresholds did not change (12.8 and 37.7 records) and other figures moved by at most 3 hosts.
 * The reference is name-matched. Some established species may be missed because of taxonomic differences, despite the GBIF and Nortaxa synonym matching.
 * "Not listed" was treated as not established (closed-world assumption, scenario A). Scenarios B and C show how sensitive the conclusions are to that.
 * GBIF counts grow over time, and citizen-science effort is uneven. The calibration should be re-run (`02_validation_analysis.R`) about once a year.

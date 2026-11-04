@@ -38,8 +38,11 @@ t0 <- Sys.time()
 prefetch_gbif(hosts, max_active = 4,
               progress = function(d, n, what) message(sprintf("  %s %d/%d  %.1f min", what, d, n, as.numeric(difftime(Sys.time(), t0, units = "mins")))))
 
+code_of <- setNames(pest_hosts$eppocode, pest_hosts$prefname)
 rows <- lapply(hosts, function(nm) {
   m <- tryCatch(gbif_match(nm, kingdom = "Plantae"), error = function(e) .empty_match(nm, conditionMessage(e)))
+  if (identical(m$matchType, "AMBIGUOUS"))   # resolve homonyms with the EPPO author citation
+    m <- resolve_with_author(m, tryCatch(eppo_overview(code_of[[nm]], key)$author, error = function(e) NA))
   s <- if (!is.na(m$acceptedKey)) tryCatch(gbif_no_summary(m$acceptedKey), error = function(e) NULL) else NULL
   if (is.null(s)) return(cbind(m, n_total_all = NA))
   b <- s$basis

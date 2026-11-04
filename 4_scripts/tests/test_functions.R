@@ -17,7 +17,7 @@ test_that("count classification follows thresholds", {
 
 test_that("bulk JSON parsers match the rgbif path", {
   skip_if_not(live)
-  for (nm in c("Malus domestica", "Picea excelsa", "Agrilus marcopoli", "Nosuchius fakeus")) {
+  for (nm in c("Malus domestica", "Picea excelsa", "Prunus dulcis", "Agrilus marcopoli", "Nosuchius fakeus")) {
     txt <- httr2::resp_body_string(httr2::req_perform(.gbif_req("/species/match", list(name = nm, verbose = "true"))))
     a <- .gbif_match_from_json(nm, NULL, txt); b <- .gbif_match_impl(nm, NULL)
     expect_equal(a$acceptedKey, b$acceptedKey, info = nm)
@@ -78,8 +78,11 @@ test_that("GBIF resolves synonyms and refuses higher-rank fallbacks", {
   skip_if_not(live)
   m <- gbif_match("Agrilus marcopoli")
   expect_equal(m$status, "SYNONYM"); expect_equal(m$gbif_canonical, "Agrilus planipennis")
-  p <- gbif_match("Picea excelsa", kingdom = "Plantae")
-  expect_equal(p$gbif_canonical, "Picea abies")
+  p <- gbif_match("Picea excelsa", kingdom = "Plantae")      # homonyms -> never guessed
+  expect_equal(p$matchType, "AMBIGUOUS"); expect_true(is.na(p$acceptedKey))
+  d <- gbif_match("Prunus dulcis", kingdom = "Plantae")      # almond vs. an old cherry homonym
+  expect_equal(resolve_with_author(d, "(Miller) Webb")$gbif_canonical, "Prunus amygdalus")
+  expect_true(is.na(resolve_with_author(d, "Nobody")$acceptedKey))
   f <- gbif_match("Nosuchius fakeus", kingdom = "Plantae")
   expect_true(is.na(f$acceptedKey))
 })

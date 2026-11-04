@@ -61,7 +61,7 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
   data.frame(input_name = name, usageKey = NA_character_, acceptedKey = NA_character_,
              gbif_name = NA_character_, gbif_canonical = NA_character_,
              rank = NA_character_, status = NA_character_, matchType = "NONE",
-             kingdom = NA_character_, note = note, stringsAsFactors = FALSE)
+             kingdom = NA_character_, note = note, candidates = NA_character_, stringsAsFactors = FALSE)
 }
 
 .is_binomial <- function(x) grepl("^[A-Z][a-z-]+ (x |×)?[a-z-]+$", trimws(x))
@@ -86,19 +86,27 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
       if (.is_binomial(name) && "speciesKey" %in% names(alt))
         acc <- ifelse(is.na(alt$speciesKey), acc, alt$speciesKey)
       acc <- as.character(acc)
-      top <- names(sort(table(acc), decreasing = TRUE))[1]
-      pick <- alt[which(acc == top)[1], , drop = FALSE]
+      if (length(unique(acc)) > 1) {
+        # Homonyms pointing to different accepted taxa (e.g. 'Prunus dulcis Mill.'
+        # = P. avium, 'Prunus dulcis (Mill.) D.A.Webb' = P. amygdalus). Never guess:
+        # keep the candidates so the caller can resolve them with the EPPO authority.
+        auth <- trimws(substring(alt$scientificName, nchar(alt$canonicalName) + 1))
+        cand <- paste(acc, auth, if ("species" %in% names(alt)) alt$species else alt$canonicalName, sep = "|", collapse = ";;")
+        out <- .empty_match(name, sprintf("Ambiguous GBIF name: %d candidate accepted taxa; not counted unless the EPPO authority resolves it",
+                                          length(unique(acc))))
+        out$matchType <- "AMBIGUOUS"; out$rank <- "SPECIES"; out$status <- "SYNONYM"; out$candidates <- cand
+        return(out)
+      }
+      top <- acc[1]
+      pick <- alt[1, , drop = FALSE]
       acc_info <- usage_lookup(top)
-      note <- if (length(unique(acc)) > 1)
-        sprintf("Ambiguous synonym: %d candidate accepted taxa; chose the most frequent (%s)",
-                length(unique(acc)), acc_info$scientificName %||% top) else "Resolved via alternative exact match"
       return(data.frame(
         input_name = name, usageKey = as.character(pick$usageKey), acceptedKey = top,
         gbif_name = acc_info$scientificName %||% NA_character_,
         gbif_canonical = acc_info$canonicalName %||% NA_character_,
         rank = as.character(pick$rank), status = as.character(pick$status),
-        matchType = if (length(unique(acc)) > 1) "AMBIGUOUS" else "EXACT",
-        kingdom = as.character(pick$kingdom %||% NA), note = note, stringsAsFactors = FALSE))
+        matchType = "EXACT", kingdom = as.character(pick$kingdom %||% NA),
+        note = "Resolved via alternative exact match", candidates = NA_character_, stringsAsFactors = FALSE))
     }
     if (mt == "NONE") return(.empty_match(name, "No GBIF match"))
     # A higher-rank fallback (e.g. a misspelt binomial matched to its genus or to
@@ -120,10 +128,45 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
   data.frame(input_name = name, usageKey = g("usageKey"), acceptedKey = accepted_key,
              gbif_name = gbif_name, gbif_canonical = canon, rank = g("rank"),
              status = status, matchType = mt, kingdom = g("kingdom"), note = note,
-             stringsAsFactors = FALSE)
+             candidates = NA_character_, stringsAsFactors = FALSE)
 }
 
 .usage_lookup <- function(key) tryCatch(rgbif::name_usage(key = key)$data, error = function(e) NULL)
+
+.norm_author <- function(x) tolower(gsub("[^A-Za-z]", "", x %||% ""))
+
+#' Resolve an AMBIGUOUS GBIF match with the author citation EPPO gives the name.
+#' Returns the match unchanged if it is not ambiguous or cannot be resolved.
+resolve_with_author <- function(m, author) {
+  if (!identical(m$matchType, "AMBIGUOUS") || is.null(m$candidates) || is.na(m$candidates) ||
+      is.null(author) || is.na(author) || !nzchar(.norm_author(author))) return(m)
+  cand <- do.call(rbind, lapply(strsplit(strsplit(m$candidates, ";;", fixed = TRUE)[[1]], "|", fixed = TRUE),
+                                function(x) data.frame(key = x[1], auth = x[2], species = x[3])))
+  hit <- unique(cand$key[.norm_author(cand$auth) == .norm_author(author)])
+  if (length(hit) != 1) {
+    # Abbreviation-tolerant comparison of author surnames: initials and
+    # ex/et/al/in are dropped, and 'Mill.' matches 'Miller' (prefix rule).
+    tok <- function(x) { w <- tolower(unlist(strsplit(gsub("[^A-Za-z\u00C0-\u024F]+", " ", x), " ")))
+                         w[nchar(w) >= 2 & !w %in% c("ex", "et", "al", "in", "f", "fil", "emend")] }
+    eppo_t <- tok(author)
+    if (!length(eppo_t)) return(m)
+    pm <- function(a, b) { n <- min(nchar(a), nchar(b)); n >= 3 && substr(a, 1, n) == substr(b, 1, n) }
+    score <- vapply(cand$auth, function(au) { ct <- tok(au)
+      matched <- sum(vapply(eppo_t, function(e) any(vapply(ct, function(c) pm(e, c), TRUE)), TRUE))
+      if (matched < length(eppo_t)) return(-1)
+      matched - 0.01 * (length(ct) - matched) }, 0)
+    if (max(score) < 0) return(m)
+    hit <- unique(cand$key[score == max(score)])
+    if (length(hit) != 1) return(m)
+  }
+  info <- .usage_lookup(hit)
+  m$acceptedKey <- hit
+  m$gbif_name <- info$scientificName %||% cand$species[cand$key == hit][1]
+  m$gbif_canonical <- info$canonicalName %||% cand$species[cand$key == hit][1]
+  m$matchType <- "EXACT"
+  m$note <- sprintf("Ambiguous GBIF name resolved with the EPPO authority (%s): %s", author, m$gbif_name)
+  m
+}
 
 # rgbif path (used for single names such as the pest, and as fallback)
 .gbif_match_impl <- function(name, kingdom = NULL) {
@@ -150,7 +193,9 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
 }
 
 # ---- Key-value cache helpers (shared by single and bulk paths) ---------------
-.ckey <- function(...) paste0("k", rlang::hash(list(...)))
+# Bump when matching/summary logic changes so stale cached results are not reused.
+HM_CACHE_VERSION <- "2026-11-04b"
+.ckey <- function(...) paste0("k", rlang::hash(list(HM_CACHE_VERSION, ...)))
 .cache_get <- function(...) {
   if (is.null(.hm$cache)) hm_init_cache()
   v <- .hm$cache$get(.ckey(...)); if (cachem::is.key_missing(v)) NULL else v
@@ -477,8 +522,11 @@ get_pest_hosts <- function(pest_name, api_key) {
     return(list(gbif = gb, eppo = ep, hosts = NULL, messages = msgs))
   }
   ep$prefname <- ov$prefname; ep$author <- ov$author; ep$norwegian <- ov$norwegian; ep$english <- ov$english
-  if (is.null(gb) || gb$matchType %in% c("NONE", "HIGHERRANK"))   # e.g. an EPPO code was entered
+  if (!is.null(gb) && identical(gb$matchType, "AMBIGUOUS")) gb <- resolve_with_author(gb, ov$author)
+  if (is.null(gb) || gb$matchType %in% c("NONE", "HIGHERRANK")) {  # e.g. an EPPO code was entered
     gb <- tryCatch(gbif_match(ov$prefname), error = function(e) NULL)
+    if (!is.null(gb)) gb <- resolve_with_author(gb, ov$author)
+  }
   h <- eppo_hosts(ep$code, api_key)
   if (!nrow(h)) msgs <- c(msgs, sprintf("EPPO has no host records for %s (%s).", ov$prefname, ep$code))
   list(gbif = gb, eppo = ep, hosts = h, messages = msgs)
@@ -487,7 +535,7 @@ get_pest_hosts <- function(pest_name, api_key) {
 #' For each host: GBIF match, Norway summary, classification, reference status.
 #' progress: optional function(i, n, name) for UI progress.
 summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = HM_T1, t2 = HM_T2,
-                            ref = NULL, progress = NULL, links = TRUE) {
+                            ref = NULL, progress = NULL, links = TRUE, api_key = NULL) {
   if (is.null(hosts) || !nrow(hosts)) return(NULL)
   n <- nrow(hosts)
   rows <- vector("list", n)
@@ -496,6 +544,10 @@ summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = HM_T1, 
     if (!is.null(progress)) progress(i, n, nm)
     m <- tryCatch(gbif_match(nm, kingdom = "Plantae"),
                   error = function(e) .empty_match(nm, conditionMessage(e)))
+    if (identical(m$matchType, "AMBIGUOUS") && !is.null(api_key) && !is.na(hosts$eppocode[i])) {
+      au <- tryCatch(eppo_overview(hosts$eppocode[i], api_key)$author, error = function(e) NA_character_)
+      m <- resolve_with_author(m, au)
+    }
     s <- if (!is.na(m$acceptedKey)) tryCatch(summary_row(gbif_no_summary(m$acceptedKey), basis_keep),
                                              error = function(e) { m$note <<- paste(m$note, "| GBIF count failed:", conditionMessage(e)); NULL }) else NULL
     if (is.null(s)) s <- summary_row(list(total = NA, basis = integer(0), years = integer(0), n_counties = NA), basis_keep)

@@ -6,11 +6,11 @@ This vignette uses emerald ash borer as the example. It shows how to read the ap
 
 ## 1. Search
 
-Type a pest name or an EPPO code in **Pest species** and press **Search**. Synonyms work. Here *Agrilus marcopoli* was entered; GBIF reports it as a synonym of *Agrilus planipennis*, and the app says so in an orange note. The name shown in the **Pest (EPPO)** box is always the EPPO preferred name, with the EPPO code and the GBIF key.
+Type a pest name or an EPPO code in **Pest species** and press **Search**. Synonyms work. Here *Agrilus marcopoli* was entered; GBIF reports it as a synonym of *Agrilus planipennis*, and the app says so in an orange note. The heading is always the EPPO preferred name, followed by the Norwegian name (if EPPO has one), the EPPO code and the GBIF key.
 
 ![Host table](img/01_hosts.png)
 
-The four boxes summarise the (filtered) host list:
+Under the pest name, three counts summarise the (filtered) host list:
 
 * **Hosts**: number of EPPO host records.
 * **Documented in Norway**: hosts with at least one GBIF record in Norway.
@@ -52,9 +52,9 @@ Use the column filters (e.g. type "Low" under Uncertainty class) and the **EPPO 
 
 ![Map](img/02_map.png)
 
-After a search the map shows the 5 hosts with the most records among the categories ticked under **EPPO categories on map** (default: Major host). To map particular hosts, select their rows in the host table and press **Update map**.
+After a search the map shows the 5 hosts with the most records among the ticked **EPPO categories** (default: Major host). To map other hosts, pick up to 10 in **Host species on map**. Type to search; this matters for pests like *Xylella fastidiosa* with 600 hosts. Then press **Update map**.
 
-* Points are coloured by uncertainty class or by EPPO category (viridis colours).
+* By default each host species gets its own colour, and the legend lists the species with the number of points shown. Points can also be coloured by uncertainty class or EPPO category.
 * Each host is its own layer and can be switched on and off in the layer box. The base map can be changed there too.
 * At most 1,000 points are fetched per host. The note above the map says when more records exist. Points with coordinate uncertainty above 1 km are left out, and duplicates of the same place, year and recorder are shown once.
 

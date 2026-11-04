@@ -1,92 +1,86 @@
 # =============================================================================
-# theme.R: VKM look for the Host Map app (matches the "FinnPRIO – VKM Shiny
-# eksempel v2" mockup). All UI colours are defined here, in one place.
-# White background and plenty of space; colour only as details: green line
-# under the navbar and on the main button, orange only for warnings and the
-# active tab. Black text; secondary text in muted olive-grey.
-# www/vkm.css holds the colour-free layout/spacing rules.
+# theme.R: VKM look for the Host Map app (VKM profile 2025). All UI colours live
+# here, in one place.
+#
+# Principle: white paper, black ink, very few colours. Colour only marks what
+# needs attention:
+#   olive   #B0AA00  the thin rule from the VKM logo; active tab; primary action
+#   caution #F39800  warnings, and (as its 30% tint) hosts with uncertain records
+# Everything else is neutral greys from the VKM palette.
+# www/vkm.css holds the colour-free layout and type rules.
 # =============================================================================
 
 VKM_COLOURS <- list(
-  primary    = "#86B29C",   # navbar line, main button, footer line
-  accent     = "#F39800",   # warnings and active tab only
-  neutral    = "#CFCFCA",   # thin borders and dividers
-  light      = "#E9EBE8",   # key-figure tiles, footer
-  muted      = "#626250",   # secondary text (labels, inactive tabs, subtitles)
-  background = "#FFFFFF",
-  text       = "#000000"
+  paper     = "#FFFFFF",
+  ink       = "#000000",
+  grey      = "#626250",   # VKM logo grey: labels, secondary text, controls
+  hairline  = "#CFCFCA",   # borders, dividers
+  mist      = "#E9EBE8",   # table striping, footer
+  olive     = "#B0AA00",   # VKM logo rule: brand accent + primary action
+  caution   = "#F39800",   # warnings
+  caution30 = "#FBE0B2"    # VKM 30 % tint of caution: uncertain hosts
 )
 
 hm_theme <- function(col = VKM_COLOURS) {
   rules <- sprintf("
-    body { background: %1$s; color: %5$s; }
-    .vkm-header, .vkm-navbar, .vkm-navbar .navbar, .sidebar, .bslib-sidebar-layout > .sidebar,
-    .card, .accordion-item, .accordion-button { background-color: %1$s !important; }
+    body, .card, .accordion-item, .sidebar, .bslib-sidebar-layout > .sidebar,
+    .vkm-header, .vkm-navbar, .vkm-navbar .navbar { background-color: %1$s !important; color: %2$s; }
 
-    /* header: logo | divider | title */
-    .vkm-sep { background: %2$s; }
-    .vkm-subtitle { color: %6$s; }
+    .vkm-sep, .hm-rule { background: %6$s; }
+    .vkm-subtitle, .hm-meta, .hm-stat span, .sidebar .control-label, .small { color: %3$s !important; }
 
-    /* navbar: white, green line under, orange under active tab */
-    .vkm-navbar .navbar { border-bottom: 3px solid %7$s; }
-    .vkm-navbar .nav-link { color: %6$s !important; border-bottom: 3px solid transparent; }
-    .vkm-navbar .nav-link.active, .vkm-navbar .nav-link.active:focus { color: %5$s !important; font-weight: 700; box-shadow: inset 0 -3px 0 %3$s; }
+    /* navigation: hairline under the bar, olive under the active tab */
+    .vkm-navbar .navbar { border-bottom: 1px solid %4$s; }
+    .vkm-navbar .nav-link { color: %2$s !important; }
+    .vkm-navbar .nav-link:hover { background-color: %5$s; }
+    .vkm-navbar .nav-link.active, .vkm-navbar .nav-link.active:focus { box-shadow: inset 0 -3px 0 %6$s; font-weight: 700 !important; }
 
-    /* sidebar */
-    .bslib-sidebar-layout > .sidebar { border-right: 1px solid %2$s; }
-    .sidebar .control-label, .sidebar label.form-label { color: %6$s; }
-    .form-control, .form-select { background: %1$s; border: 1px solid %2$s; }
+    .bslib-sidebar-layout > .sidebar { border-right: 1px solid %4$s; }
+    .form-control, .form-select, .selectize-input { background: %1$s; border: 1px solid %4$s; }
+    .form-control:focus, .selectize-input.focus { border-color: %3$s; box-shadow: 0 0 0 2px %5$s; }
+    .form-check-input:checked { background-color: %3$s !important; border-color: %3$s !important; }
+    .form-check-input:focus { box-shadow: 0 0 0 2px %5$s; border-color: %3$s; }
+    input[type=checkbox], input[type=radio] { accent-color: %3$s; }
+    .shiny-input-container input[type=checkbox]:checked, .shiny-input-container input[type=radio]:checked { background-color: %3$s !important; border-color: %3$s !important; }
+    .selectize-control.multi .selectize-input > div { background: %5$s; color: %2$s; border-radius: 4px; }
 
-    /* buttons */
-    .btn.btn-primary { background-color: %7$s; border: 1px solid %5$s; color: %5$s; font-weight: 700; }
-    .btn.btn-primary:hover, .btn.btn-primary:focus { background-color: %7$s; filter: brightness(0.95); color: %5$s; }
-    .btn.btn-secondary, .btn-default:not(.btn-primary) { background-color: %1$s; border: 1px solid %2$s; color: %5$s; }
-    .btn.btn-secondary:hover, .btn-default:not(.btn-primary):hover { background-color: %4$s; color: %5$s; }
+    /* actions: olive = the one thing to press; everything else is quiet */
+    .btn.btn-primary { background-color: %6$s; border: 1px solid %2$s; color: %2$s; font-weight: 700; }
+    .btn.btn-primary:hover, .btn.btn-primary:focus { background-color: %6$s; filter: brightness(1.06); color: %2$s; }
+    .btn.btn-secondary, .btn-default:not(.btn-primary) { background-color: %1$s; border: 1px solid %4$s; color: %2$s; }
+    .btn.btn-secondary:hover, .btn-default:not(.btn-primary):hover { background-color: %5$s; color: %2$s; }
+    .btn:focus-visible, .nav-link:focus-visible { outline: 2px solid %2$s; outline-offset: 2px; }
 
-    /* warnings / notes */
-    .alert { background-color: %1$s; border: 1px solid %2$s; border-left: 6px solid %2$s; border-radius: 6px; }
-    .alert-warning { border-color: %3$s; border-left-color: %3$s; }
+    /* warnings: white with a caution edge */
+    .alert { background-color: %1$s; border: 1px solid %4$s; border-left: 4px solid %3$s; border-radius: 4px; }
+    .alert-warning { border-color: %7$s; border-left-color: %7$s; }
 
-    /* key-figure tiles and cards */
-    .bslib-value-box.card { background-color: %4$s !important; border: 0 !important; border-radius: 8px; box-shadow: none; }
-    .bslib-value-box .value-box-title { color: %6$s; }
-    .card { border: 1px solid %2$s; border-radius: 8px; box-shadow: none; }
-    .accordion-button:not(.collapsed) { box-shadow: inset 0 -1px 0 %2$s; }
+    /* table */
+    table.dataTable thead th { background-color: %1$s; border-bottom: 1px solid %2$s !important; }
+    table.dataTable.stripe tbody tr.odd > *, table.dataTable.display tbody tr.odd > * { box-shadow: inset 0 0 0 9999px %5$s; }
+    table.dataTable tbody tr.selected > * { box-shadow: inset 0 0 0 9999px %4$s !important; color: %2$s !important; }
 
-    /* tables and form controls */
-    table.dataTable thead th { background-color: %1$s; border-bottom: 2px solid %2$s !important; }
-    table.dataTable.stripe tbody tr.odd > *, table.dataTable.display tbody tr.odd > *,
-    .table-striped > tbody > tr:nth-of-type(odd) > * { box-shadow: inset 0 0 0 9999px %4$s; --bs-table-accent-bg: %4$s; }
-    table.dataTable tbody tr:hover > * { box-shadow: inset 0 0 0 9999px %2$s !important; }
-    table.dataTable tbody tr.selected > * { box-shadow: inset 0 0 0 9999px %4$s !important; color: %5$s !important; }
-    .form-check-input:checked { background-color: %7$s; border-color: %5$s; }
-    .small, small, .text-muted { color: %6$s !important; }
-
-    /* footer */
-    .vkm-footer { background: %4$s; border-top: 3px solid %7$s; }
+    .vkm-footer { background: %5$s; }
     .leaflet-container { background: %1$s; }
-  ", col$background, col$neutral, col$accent, col$light, col$text, col$muted, col$primary)
+  ", col$paper, col$ink, col$grey, col$hairline, col$mist, col$olive, col$caution)
 
   bslib::bs_theme(
-    version = 5, bg = col$background, fg = col$text,
-    primary = col$primary, secondary = col$neutral,
-    success = col$primary, info = col$neutral,
-    warning = col$accent, danger = col$accent,
-    light = col$light, dark = col$text,
-    base_font = bslib::font_collection("Calibri", "Segoe UI", "Tahoma", "sans-serif"),
-    font_scale = 0.95
+    version = 5, bg = col$paper, fg = col$ink,
+    primary = col$olive, secondary = col$hairline,
+    success = col$olive, info = col$hairline, warning = col$caution, danger = col$caution,
+    light = col$mist, dark = col$ink,
+    base_font = bslib::font_collection("Calibri", "Carlito", "Segoe UI", "sans-serif")
   ) |>
     bslib::bs_add_variables(
-      "card-bg" = col$background, "card-cap-bg" = col$background, "border-color" = col$neutral,
-      "navbar-light-color" = col$muted, "navbar-light-active-color" = col$text,
-      "link-color" = col$text, "link-hover-color" = col$text,
-      "btn-color" = col$text, "text-muted" = col$muted,
+      "border-color" = col$hairline, "card-bg" = col$paper, "card-cap-bg" = col$paper,
+      "link-color" = col$ink, "link-hover-color" = col$ink, "text-muted" = col$grey,
+      "btn-color" = col$ink, "navbar-light-color" = col$ink, "navbar-light-active-color" = col$ink,
       .where = "declarations"
     ) |>
     bslib::bs_add_rules(rules)
 }
 
-#' White header: VKM logo (if present in www/), thin divider, title + subtitle.
+#' White header: VKM logo (if present in www/), hairline divider, app name.
 vkm_header <- function(title, subtitle = NULL, www = "www") {
   logo <- c(file.path(www, "vkm_logo.svg"), file.path(www, "vkm_logo.png"))
   logo <- logo[file.exists(logo)][1]
@@ -101,20 +95,46 @@ vkm_header <- function(title, subtitle = NULL, www = "www") {
 
 vkm_footer <- function(project = "FinnPRIO", name = "Daniel Flø", email = "Daniel.Flo@vkm.no") {
   shiny::div(class = "vkm-footer",
-    shiny::span(sprintf("Host Map is part of the %s project. For more information, contact %s ", project, name),
-                shiny::tags$a(href = paste0("mailto:", email), paste0("<", email, ">"))),
+    shiny::span(sprintf("Host Map is part of the %s project. Questions: %s, ", project, name),
+                shiny::tags$a(href = paste0("mailto:", email), email)),
     shiny::span("VKM"))
 }
 
-#' Cell highlight for the uncertainty classes: palette colours only, softened
-#' with transparency so they read as details. Black text on all of them.
-uncertainty_fill <- function(col = VKM_COLOURS) {
-  c("Not documented in Norway" = col$background,
-    "High uncertainty"         = paste0(col$accent, "59"),
-    "Moderate uncertainty"     = col$light,
-    "Low uncertainty"          = paste0(col$primary, "8C"))
+#' Pest heading: the species name is the page's headline, with the VKM olive
+#' rule under it (as in the logo) and one quiet line of counts.
+hm_pest_heading <- function(name, norwegian = NA, code = NA, gbif_key = NA, n_hosts, n_doc, n_est) {
+  meta <- c(if (!is.na(norwegian)) paste0("Norwegian: ", norwegian),
+            if (!is.na(code)) paste0("EPPO code ", code),
+            if (!is.na(gbif_key)) paste0("GBIF key ", gbif_key))
+  stat <- function(n, label) shiny::div(class = "hm-stat", shiny::tags$b(formatC(n, big.mark = " ", format = "d")), shiny::span(label))
+  shiny::div(class = "hm-pest",
+    shiny::tags$h1(class = "hm-pest-name", name),
+    shiny::div(class = "hm-meta", paste(meta, collapse = ", ")),
+    shiny::div(class = "hm-rule"),
+    shiny::div(class = "hm-stats",
+      stat(n_hosts, "host plants in EPPO"),
+      stat(n_doc, "documented in Norway"),
+      stat(n_est, "established in Norway (Artsdatabanken)")))
 }
 
-#' Discrete viridis palette for map points / plots (never the UI palette).
-hm_viridis <- function(levels) leaflet::colorFactor(viridisLite::viridis(max(1, length(levels)), end = 0.95),
-                                                    levels = levels, ordered = TRUE)
+#' Uncertainty highlighting in the table: colour only where caution is needed.
+#' High = caution tint, moderate = half of it, low / not documented = no fill.
+uncertainty_fill <- function(col = VKM_COLOURS) {
+  c("Not documented in Norway" = col$paper,
+    "High uncertainty"         = col$caution30,
+    "Moderate uncertainty"     = paste0(col$caution30, "80"),
+    "Low uncertainty"          = col$paper)
+}
+
+#' HTML legend for the map: one row per class with a colour dot, label and count.
+hm_map_legend <- function(title, colours, labels, counts) {
+  rows <- paste0(sprintf('<div class="hm-leg-row"><span class="hm-leg-dot" style="background:%s"></span><span class="hm-leg-lab">%s</span><span class="hm-leg-n">%s</span></div>',
+                         colours, labels, counts), collapse = "")
+  sprintf('<div class="hm-leg-title">%s</div>%s', htmltools::htmlEscape(title), rows)
+}
+
+#' Discrete palettes for data (map points), never the UI palette.
+hm_viridis_colours <- function(n) viridisLite::viridis(max(1, n), end = 0.95)
+#' Host species: viridis "turbo" (option H) separates up to ~10 classes clearly.
+hm_species_colours <- function(n) if (n <= 1) viridisLite::turbo(3)[2] else viridisLite::turbo(n, begin = 0.05, end = 0.95)
+hm_viridis <- function(levels) leaflet::colorFactor(hm_viridis_colours(length(levels)), levels = levels, ordered = TRUE)
