@@ -8,3 +8,4 @@
 .Renviron
 *api_key*
 4_scripts/tests/_snaps/
+*.log

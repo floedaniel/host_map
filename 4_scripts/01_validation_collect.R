@@ -35,8 +35,8 @@ saveRDS(pest_hosts, "2_processed_data/validation_pest_hosts.rds")
 hosts <- unique(pest_hosts$prefname)
 message(length(hosts), " unique host names; prefetching GBIF in parallel ...")
 t0 <- Sys.time()
-prefetch_gbif(hosts, CACHE_DIR, workers = 6,
-              progress = function(d, n) message(sprintf("  %d/%d  %.1f min", d, n, as.numeric(difftime(Sys.time(), t0, units = "mins")))))
+prefetch_gbif(hosts, max_active = 4,
+              progress = function(d, n, what) message(sprintf("  %s %d/%d  %.1f min", what, d, n, as.numeric(difftime(Sys.time(), t0, units = "mins")))))
 
 rows <- lapply(hosts, function(nm) {
   m <- tryCatch(gbif_match(nm, kingdom = "Plantae"), error = function(e) .empty_match(nm, conditionMessage(e)))

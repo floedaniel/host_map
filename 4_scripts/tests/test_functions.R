@@ -9,12 +9,39 @@ key <- Sys.getenv("EPPO_API_KEY")
 test_that("count classification follows thresholds", {
   x <- classify_count(c(0, 1, 10, 11, 50, 51, NA), 10, 50)
   expect_equal(as.character(x), c(COUNT_CLASS_LEVELS[c(1, 2, 2, 3, 3, 4)], NA))
-  expect_equal(as.character(classify_count(c(5, 6), 5, 6)), COUNT_CLASS_LEVELS[c(2, 3)])
+  # calibrated defaults: 1-12 high, 13-37 moderate, >= 38 low
+  y <- classify_count(c(0, 12, 13, 37, 38))
+  expect_equal(as.character(y), COUNT_CLASS_LEVELS[c(1, 2, 3, 3, 4)])
+  expect_false("LIVING_SPECIMEN" %in% GBIF_BASIS_COUNTED)
 })
 
-test_that("revised classification downgrades poorly spread high counts", {
-  x <- classify_revised(c(500, 500, 500, 30, 0), c(30, 3, 30, 30, 0), c(10, 10, 1, 10, 0))
-  expect_equal(as.character(x), COUNT_CLASS_LEVELS[c(4, 3, 3, 3, 1)])
+test_that("bulk JSON parsers match the rgbif path", {
+  skip_if_not(live)
+  for (nm in c("Malus domestica", "Picea excelsa", "Agrilus marcopoli", "Nosuchius fakeus")) {
+    txt <- httr2::resp_body_string(httr2::req_perform(.gbif_req("/species/match", list(name = nm, verbose = "true"))))
+    a <- .gbif_match_from_json(nm, NULL, txt); b <- .gbif_match_impl(nm, NULL)
+    expect_equal(a$acceptedKey, b$acceptedKey, info = nm)
+    expect_equal(a$gbif_canonical, b$gbif_canonical, info = nm)
+  }
+  txt <- httr2::resp_body_string(httr2::req_perform(.gbif_req("/occurrence/search",
+           list(taxonKey = 3001244, country = "NO", limit = 0, facet = c("basisOfRecord", "year", "gadmLevel1Gid"), facetLimit = 500))))
+  j <- .summary_from_json(txt); r <- .gbif_no_summary_impl("3001244")
+  expect_equal(j$total, r$total); expect_equal(sort(j$basis), sort(r$basis))
+  expect_equal(sort(j$years), sort(r$years)); expect_equal(j$n_counties, r$n_counties)
+})
+
+test_that("points query ORs basisOfRecord and respects the cap", {
+  skip_if_not(live)
+  p <- .gbif_points_impl("3001244", 350, c("HUMAN_OBSERVATION", "PRESERVED_SPECIMEN"))
+  expect_lte(nrow(p$data), 350); expect_gt(p$n_available, 1000)
+  expect_true(all(p$data$basisOfRecord %in% c("HUMAN_OBSERVATION", "PRESERVED_SPECIMEN")))
+})
+
+test_that("EPPO overview gives the preferred name", {
+  skip_if_not(live && nzchar(key))
+  o <- eppo_overview("ERWIAM", key); expect_equal(o$prefname, "Erwinia amylovora")
+  p <- get_pest_hosts("ERWIAM", key)          # code entered: name comes from EPPO, GBIF matched on it
+  expect_equal(p$eppo$prefname, "Erwinia amylovora"); expect_equal(p$gbif$gbif_canonical, "Erwinia amylovora")
 })
 
 test_that("summary_row respects basisOfRecord filter", {

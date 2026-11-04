@@ -1,0 +1,5 @@
+"status3","hosts","q10","q25","median","q75","q90"
+"Absent",26,0,0,1,2,3.5
+"Present, not established",30,0,0.25,2,9,55.2
+"Established",217,15,93,854,5661,25891
+"Not listed",1294,0,0,0,0,1

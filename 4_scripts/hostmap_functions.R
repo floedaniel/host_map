@@ -48,6 +48,10 @@ EPPO_CATEGORY_LEVELS <- c("Major host", "Host", "Minor host", "Experimental",
                           "Incidental", "Artificial", "Wild/Weed",
                           "Doubtful host", "Unclassified")
 
+# Records counted for the uncertainty class (validated choice): everything except
+# living specimens (botanic gardens) and fossils.
+GBIF_BASIS_COUNTED <- setdiff(GBIF_BASIS_ALL, c("LIVING_SPECIMEN", "FOSSIL_SPECIMEN"))
+
 COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
                         "Moderate uncertainty", "Low uncertainty")
 
@@ -62,37 +66,34 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
 
 .is_binomial <- function(x) grepl("^[A-Z][a-z-]+ (x |×)?[a-z-]+$", trimws(x))
 
-.gbif_match_impl <- function(name, kingdom = NULL) {
-  name <- trimws(name)
-  if (!nzchar(name)) return(.empty_match(name, "Empty name"))
-  b <- tryCatch(as.data.frame(rgbif::name_backbone(name = name, kingdom = kingdom)),
-                error = function(e) stop("GBIF name lookup failed: ", conditionMessage(e)))
-  g <- function(col) if (col %in% names(b)) as.character(b[[col]][1]) else NA_character_
+# Core matching logic, shared by the rgbif path (single names, e.g. the pest)
+# and the bulk JSON path (host lists). `b` is the backbone match (one row),
+# `alt` the verbose alternatives (data frame, may be empty).
+.gbif_match_logic <- function(name, kingdom, b, alt, usage_lookup) {
+  g <- function(col) if (col %in% names(b) && length(b[[col]])) as.character(b[[col]][1]) else NA_character_
   mt <- g("matchType") %||% "NONE"
   note <- ""
   # GBIF falls back to a higher rank when a name is an ambiguous synonym (e.g.
-  # "Picea excelsa" -> Pinaceae). Inspect the alternatives in that case.
+  # "Picea excelsa" -> Pinaceae). Inspect the exact-match alternatives then.
   if (mt %in% c("HIGHERRANK", "NONE")) {
-    v <- tryCatch(rgbif::name_backbone_verbose(name = name, kingdom = kingdom),
-                  error = function(e) NULL)
-    alt <- if (!is.null(v)) as.data.frame(v$alternatives) else data.frame()
-    if (nrow(alt) > 0 && "matchType" %in% names(alt)) {
-      alt <- alt[alt$matchType == "EXACT", , drop = FALSE]
+    if (NROW(alt) > 0 && "matchType" %in% names(alt)) {
+      alt <- alt[alt$matchType %in% "EXACT", , drop = FALSE]
       if (!is.null(kingdom) && "kingdom" %in% names(alt)) alt <- alt[alt$kingdom %in% kingdom, , drop = FALSE]
     }
-    if (nrow(alt) > 0) {
+    if (NROW(alt) > 0) {
       acc <- if ("acceptedUsageKey" %in% names(alt)) ifelse(is.na(alt$acceptedUsageKey), alt$usageKey, alt$acceptedUsageKey) else alt$usageKey
       # For a binomial input, roll infraspecific accepted taxa up to the species
       if (.is_binomial(name) && "speciesKey" %in% names(alt))
         acc <- ifelse(is.na(alt$speciesKey), acc, alt$speciesKey)
+      acc <- as.character(acc)
       top <- names(sort(table(acc), decreasing = TRUE))[1]
       pick <- alt[which(acc == top)[1], , drop = FALSE]
-      acc_info <- tryCatch(rgbif::name_usage(key = top)$data, error = function(e) NULL)
+      acc_info <- usage_lookup(top)
       note <- if (length(unique(acc)) > 1)
         sprintf("Ambiguous synonym: %d candidate accepted taxa; chose the most frequent (%s)",
                 length(unique(acc)), acc_info$scientificName %||% top) else "Resolved via alternative exact match"
       return(data.frame(
-        input_name = name, usageKey = as.character(pick$usageKey), acceptedKey = as.character(top),
+        input_name = name, usageKey = as.character(pick$usageKey), acceptedKey = top,
         gbif_name = acc_info$scientificName %||% NA_character_,
         gbif_canonical = acc_info$canonicalName %||% NA_character_,
         rank = as.character(pick$rank), status = as.character(pick$status),
@@ -108,7 +109,7 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
   }
   status <- g("status")
   accepted_key <- if (identical(status, "SYNONYM") && !is.na(g("acceptedUsageKey"))) g("acceptedUsageKey") else g("usageKey")
-  gbif_name <- if (identical(status, "SYNONYM")) g("acceptedScientificName") %||% g("scientificName") else g("scientificName")
+  gbif_name <- if (identical(status, "SYNONYM")) g("acceptedScientificName") %||% g("species") %||% g("scientificName") else g("scientificName")
   canon <- g("canonicalName")
   if (identical(status, "SYNONYM")) {
     note <- paste0("Synonym of ", gbif_name)
@@ -121,7 +122,46 @@ COUNT_CLASS_LEVELS <- c("Not documented in Norway", "High uncertainty",
              status = status, matchType = mt, kingdom = g("kingdom"), note = note,
              stringsAsFactors = FALSE)
 }
-gbif_match <- hm_memo("gbif_match", .gbif_match_impl)
+
+.usage_lookup <- function(key) tryCatch(rgbif::name_usage(key = key)$data, error = function(e) NULL)
+
+# rgbif path (used for single names such as the pest, and as fallback)
+.gbif_match_impl <- function(name, kingdom = NULL) {
+  name <- trimws(name)
+  if (!nzchar(name)) return(.empty_match(name, "Empty name"))
+  b <- tryCatch(as.data.frame(rgbif::name_backbone(name = name, kingdom = kingdom)),
+                error = function(e) stop("GBIF name lookup failed: ", conditionMessage(e)))
+  mt <- if ("matchType" %in% names(b)) b$matchType[1] else "NONE"
+  alt <- data.frame()
+  if (mt %in% c("HIGHERRANK", "NONE")) {
+    v <- tryCatch(rgbif::name_backbone_verbose(name = name, kingdom = kingdom), error = function(e) NULL)
+    if (!is.null(v)) alt <- as.data.frame(v$alternatives)
+  }
+  .gbif_match_logic(name, kingdom, b, alt, .usage_lookup)
+}
+
+# Parse a GBIF v1 /species/match?verbose=true JSON response (bulk path)
+.gbif_match_from_json <- function(name, kingdom, txt) {
+  j <- jsonlite::fromJSON(txt, simplifyVector = TRUE)
+  alt <- if (!is.null(j$alternatives)) as.data.frame(j$alternatives) else data.frame()
+  j$alternatives <- NULL
+  b <- as.data.frame(lapply(j, function(x) if (length(x)) x[1] else NA), stringsAsFactors = FALSE)
+  .gbif_match_logic(trimws(name), kingdom, b, alt, .usage_lookup)
+}
+
+# ---- Key-value cache helpers (shared by single and bulk paths) ---------------
+.ckey <- function(...) paste0("k", rlang::hash(list(...)))
+.cache_get <- function(...) {
+  if (is.null(.hm$cache)) hm_init_cache()
+  v <- .hm$cache$get(.ckey(...)); if (cachem::is.key_missing(v)) NULL else v
+}
+.cache_set <- function(value, ...) { if (is.null(.hm$cache)) hm_init_cache(); .hm$cache$set(.ckey(...), value); value }
+
+gbif_match <- function(name, kingdom = NULL) {
+  name <- trimws(name)
+  v <- .cache_get("match", name, kingdom); if (!is.null(v)) return(v)
+  .cache_set(.gbif_match_impl(name, kingdom), "match", name, kingdom)
+}
 
 # ---- EPPO Global Database API (v2) -------------------------------------------
 EPPO_BASE <- "https://api.eppo.int/gd/v2"
@@ -179,6 +219,9 @@ eppo_resolve <- function(input, gbif = NULL, api_key) {
 
 # ---- GBIF Norway occurrence summary ------------------------------------------
 # One request per taxon (limit = 0 => no records, only counts + facets).
+.summary_from_parts <- function(total, basis, years, n_counties)
+  list(total = as.integer(total %||% 0), basis = basis, years = years, n_counties = as.integer(n_counties))
+
 .gbif_no_summary_impl <- function(taxonKey, country = "NO") {
   r <- rgbif::occ_search(taxonKey = taxonKey, country = country, limit = 0,
                          facet = c("basisOfRecord", "year", "gadmLevel1Gid"),
@@ -186,13 +229,25 @@ eppo_resolve <- function(input, gbif = NULL, api_key) {
   f <- r$facets
   basis <- if (!is.null(f$basisOfRecord) && nrow(f$basisOfRecord)) setNames(f$basisOfRecord$count, f$basisOfRecord$name) else integer(0)
   yrs <- if (!is.null(f$year) && nrow(f$year)) as.integer(f$year$name) else integer(0)
-  ycount <- if (!is.null(f$year) && nrow(f$year)) f$year$count else integer(0)
   gadm <- f[[grep("gadm", names(f), value = TRUE)[1] %||% "none"]]
-  list(total = as.integer(r$meta$count %||% 0), basis = basis,
-       years = yrs, year_counts = ycount,
-       n_counties = if (is.null(gadm)) 0L else nrow(gadm))
+  .summary_from_parts(r$meta$count, basis, yrs, if (is.null(gadm)) 0L else nrow(gadm))
 }
-gbif_no_summary <- hm_memo("gbif_no_summary", .gbif_no_summary_impl)
+
+# Same summary from the raw GBIF v1 occurrence/search JSON (bulk path)
+.summary_from_json <- function(txt) {
+  j <- jsonlite::fromJSON(txt, simplifyVector = FALSE)
+  fc <- list(); for (f in j$facets) fc[[f$field]] <- f$counts
+  nm <- function(x) vapply(x, function(e) as.character(e$name), "")
+  ct <- function(x) vapply(x, function(e) as.numeric(e$count), 0)
+  b <- fc$BASIS_OF_RECORD
+  .summary_from_parts(j$count, if (length(b)) setNames(as.integer(ct(b)), nm(b)) else integer(0),
+                      as.integer(nm(fc$YEAR)), length(fc$GADM_LEVEL_1_GID))
+}
+
+gbif_no_summary <- function(taxonKey, country = "NO") {
+  v <- .cache_get("nosum", as.character(taxonKey), country); if (!is.null(v)) return(v)
+  .cache_set(.gbif_no_summary_impl(taxonKey, country), "nosum", as.character(taxonKey), country)
+}
 
 #' Flatten a summary into a one-row data frame given the selected basisOfRecord set.
 summary_row <- function(s, basis_keep = GBIF_BASIS_ALL) {
@@ -214,26 +269,18 @@ summary_row <- function(s, basis_keep = GBIF_BASIS_ALL) {
 
 # ---- Classification ----------------------------------------------------------
 
-#' Original count-based rule (spec): 0 / 1-t1 / t1+1 - t2 / > t2
-classify_count <- function(n, t1 = 10, t2 = 50) {
+#' Uncertainty class for documented occurrence, from the record count.
+#' Default thresholds are the calibrated values from the validation
+#' (5_outputs/REPORT.md): P(host really present in Norway) = 0.95 at the
+#' high/moderate boundary and 0.99 at the moderate/low boundary.
+HM_T1 <- 12L   # 1..12 records   -> high uncertainty
+HM_T2 <- 37L   # 13..37 records  -> moderate uncertainty; >= 38 -> low uncertainty
+classify_count <- function(n, t1 = HM_T1, t2 = HM_T2) {
   out <- ifelse(is.na(n), NA_character_,
          ifelse(n == 0, COUNT_CLASS_LEVELS[1],
          ifelse(n <= t1, COUNT_CLASS_LEVELS[2],
          ifelse(n <= t2, COUNT_CLASS_LEVELS[3], COUNT_CLASS_LEVELS[4]))))
   factor(out, levels = COUNT_CLASS_LEVELS)
-}
-
-#' Revised rule (see REPORT.md, from the validation in validation/). Combines
-#' record count with temporal spread and spatial spread. A host is "Low
-#' uncertainty" only if it has > t2 records AND records in >= min_years distinct
-#' years AND >= min_counties counties. Hosts that pass the count threshold but
-#' not the spread criteria are downgraded one level.
-classify_revised <- function(n, n_years, n_counties, t1 = 10, t2 = 50,
-                             min_years = 10, min_counties = 2) {
-  base <- as.integer(classify_count(n, t1, t2))
-  spread_ok <- !is.na(n_years) & !is.na(n_counties) & n_years >= min_years & n_counties >= min_counties
-  lvl <- ifelse(base == 4 & !spread_ok, 3L, base)
-  factor(COUNT_CLASS_LEVELS[lvl], levels = COUNT_CLASS_LEVELS)
 }
 
 # ---- Artsdatabanken reference ("established in Norwegian nature") -------------
@@ -342,21 +389,39 @@ artskart_url <- function(taxon_id, name) {
 }
 
 # ---- Occurrence points for the map ------------------------------------------
-.gbif_points_impl <- function(taxonKey, max_points = 2000, basis = GBIF_BASIS_ALL, country = "NO") {
-  fields <- c("key", "decimalLatitude", "decimalLongitude", "year", "recordedBy",
-              "basisOfRecord", "coordinateUncertaintyInMeters", "scientificName")
-  one <- function(b) {
-    r <- rgbif::occ_search(taxonKey = taxonKey, country = country, hasCoordinate = TRUE,
-                           hasGeospatialIssue = FALSE, basisOfRecord = b,
-                           limit = max_points, fields = fields)
-    list(n = r$meta$count %||% 0, data = r$data)
-  }
-  res <- lapply(basis, function(b) tryCatch(one(b), error = function(e) list(n = 0, data = NULL)))
-  n_avail <- sum(vapply(res, function(z) as.numeric(z$n), 0))
-  d <- bind_rows(lapply(res, `[[`, "data"))
+# One paged query per host with all selected basisOfRecord values OR-ed together
+# (GBIF accepts repeated parameters); pages are fetched concurrently.
+.gbif_points_impl <- function(taxonKey, max_points = 1000, basis = GBIF_BASIS_ALL, country = "NO", max_active = 3) {
+  q <- list(taxonKey = taxonKey, country = country, hasCoordinate = "true", hasGeospatialIssue = "false",
+            basisOfRecord = basis)
+  first <- req_perform(.gbif_req("/occurrence/search", c(q, limit = 0)))
+  if (resp_status(first) != 200) stop("GBIF occurrence search failed (HTTP ", resp_status(first), ")")
+  n_avail <- jsonlite::fromJSON(resp_body_string(first))$count %||% 0
+  n_get <- min(n_avail, max_points)
+  if (n_get == 0) return(list(n_available = n_avail, data = NULL))
+  offs <- seq(0, n_get - 1, by = 300)
+  reqs <- lapply(offs, function(o) .gbif_req("/occurrence/search", c(q, limit = min(300, n_get - o), offset = o)))
+  resp <- httr2::req_perform_parallel(reqs, on_error = "continue", max_active = max_active, progress = FALSE)
+  keep <- c("key", "decimalLatitude", "decimalLongitude", "year", "recordedBy",
+            "basisOfRecord", "coordinateUncertaintyInMeters", "scientificName")
+  d <- bind_rows(lapply(resp, function(r) {
+    txt <- .ok_body(r); if (is.null(txt)) return(NULL)
+    x <- jsonlite::fromJSON(txt, simplifyVector = TRUE)$results
+    if (!NROW(x)) return(NULL)
+    for (k in keep) if (!k %in% names(x)) x[[k]] <- NA
+    x <- x[, keep]
+    x$recordedBy <- as.character(x$recordedBy); x$year <- as.integer(x$year)
+    x$coordinateUncertaintyInMeters <- as.numeric(x$coordinateUncertaintyInMeters)
+    x
+  }))
   list(n_available = n_avail, data = d)
 }
-gbif_points <- hm_memo("gbif_points", .gbif_points_impl)
+
+gbif_points <- function(taxonKey, max_points = 1000, basis = GBIF_BASIS_ALL, country = "NO") {
+  basis <- sort(basis)
+  v <- .cache_get("points", as.character(taxonKey), max_points, basis, country); if (!is.null(v)) return(v)
+  .cache_set(.gbif_points_impl(taxonKey, max_points, basis, country), "points", as.character(taxonKey), max_points, basis, country)
+}
 
 #' Clean, precision-filter and de-duplicate fetched points.
 clean_points <- function(d, max_uncertainty_m = 1000, keep_missing_uncertainty = TRUE, max_points = 2000) {
@@ -375,27 +440,54 @@ clean_points <- function(d, max_uncertainty_m = 1000, keep_missing_uncertainty =
 # ---- Main pipeline -----------------------------------------------------------
 
 #' Resolve a pest and return its EPPO host list.
+.eppo_overview_impl <- function(code, api_key) {
+  ov <- .eppo_get(paste0("/taxons/taxon/", utils::URLencode(code), "/overview"), api_key)
+  nm <- tryCatch(.eppo_get(paste0("/taxons/taxon/", utils::URLencode(code), "/names"), api_key), error = function(e) NULL)
+  nm <- if (is.null(nm) || !NROW(nm)) data.frame() else as.data.frame(nm)
+  pick <- function(langs) { if (!NROW(nm)) return(NA_character_)
+    x <- nm[nm$lang_iso %in% langs, , drop = FALSE]; if (!nrow(x)) return(NA_character_)
+    x <- x[order(!x$preferred), ]; x$fullname[1] }
+  author <- if (NROW(nm)) { x <- nm[nm$lang_iso %in% "la" & nm$preferred %in% TRUE, ]; if (nrow(x)) x$author[1] else NA_character_ } else NA_character_
+  list(prefname = ov$prefname %||% NA_character_, author = author %||% NA_character_,
+       norwegian = pick(c("no", "nb", "nn")), english = pick("en"))
+}
+eppo_overview <- hm_memo("eppo_overview", .eppo_overview_impl)
+
+#' Resolve a pest and return its EPPO host list. The displayed pest name is the
+#' EPPO preferred name; GBIF is used for synonym resolution and the taxonKey.
 get_pest_hosts <- function(pest_name, api_key) {
   msgs <- character(0)
-  gb <- tryCatch(gbif_match(pest_name), error = function(e) { msgs <<- c(msgs, conditionMessage(e)); NULL })
-  if (is.null(gb) || gb$matchType == "NONE") msgs <- c(msgs, sprintf("GBIF could not resolve '%s'; trying EPPO with the name as entered.", pest_name))
-  else if (gb$matchType == "HIGHERRANK") msgs <- c(msgs, sprintf("GBIF matched '%s' only at rank %s (%s).", pest_name, gb$rank, gb$gbif_name))
-  else if (identical(gb$status, "SYNONYM")) msgs <- c(msgs, sprintf("'%s' is a GBIF synonym of %s.", pest_name, gb$gbif_name))
+  pest_name <- trimws(pest_name)
+  is_code <- grepl("^[A-Z0-9]{5,6}$", pest_name)
+  gb <- NULL
+  if (!is_code) {
+    gb <- tryCatch(gbif_match(pest_name), error = function(e) { msgs <<- c(msgs, conditionMessage(e)); NULL })
+    if (is.null(gb) || gb$matchType == "NONE") msgs <- c(msgs, sprintf("GBIF could not resolve '%s'; trying EPPO with the name as entered.", pest_name))
+    else if (gb$matchType == "HIGHERRANK") msgs <- c(msgs, sprintf("GBIF matched '%s' only at a higher rank (%s).", pest_name, gb$rank))
+    else if (identical(gb$status, "SYNONYM")) msgs <- c(msgs, sprintf("'%s' is a GBIF synonym of %s.", pest_name, gb$gbif_name))
+  }
   ep <- eppo_resolve(pest_name, gb, api_key)
   if (is.na(ep$code)) {
     msgs <- c(msgs, "No EPPO code found for this name (or its GBIF accepted name).")
     return(list(gbif = gb, eppo = ep, hosts = NULL, messages = msgs))
   }
+  ov <- tryCatch(eppo_overview(ep$code, api_key), error = function(e) NULL)
+  if (is.null(ov) || is.na(ov$prefname)) {
+    msgs <- c(msgs, sprintf("EPPO code %s was not found.", ep$code))
+    return(list(gbif = gb, eppo = ep, hosts = NULL, messages = msgs))
+  }
+  ep$prefname <- ov$prefname; ep$author <- ov$author; ep$norwegian <- ov$norwegian; ep$english <- ov$english
+  if (is.null(gb) || gb$matchType %in% c("NONE", "HIGHERRANK"))   # e.g. an EPPO code was entered
+    gb <- tryCatch(gbif_match(ov$prefname), error = function(e) NULL)
   h <- eppo_hosts(ep$code, api_key)
-  if (!nrow(h)) msgs <- c(msgs, sprintf("EPPO has no host records for %s.", ep$code))
+  if (!nrow(h)) msgs <- c(msgs, sprintf("EPPO has no host records for %s (%s).", ov$prefname, ep$code))
   list(gbif = gb, eppo = ep, hosts = h, messages = msgs)
 }
 
 #' For each host: GBIF match, Norway summary, classification, reference status.
 #' progress: optional function(i, n, name) for UI progress.
-summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_ALL, t1 = 10, t2 = 50,
-                            min_years = 10, min_counties = 2, ref = NULL,
-                            progress = NULL, links = TRUE) {
+summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = HM_T1, t2 = HM_T2,
+                            ref = NULL, progress = NULL, links = TRUE) {
   if (is.null(hosts) || !nrow(hosts)) return(NULL)
   n <- nrow(hosts)
   rows <- vector("list", n)
@@ -414,8 +506,7 @@ summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_ALL, t1 = 10, t2 = 50
   out <- data.frame(host_plant = hosts$prefname, host_eppocode = hosts$eppocode,
                     eppo_category = factor(hosts$class_label, levels = union(EPPO_CATEGORY_LEVELS, unique(hosts$class_label))),
                     g[, setdiff(names(g), "input_name")], stringsAsFactors = FALSE)
-  out$count_class <- classify_count(out$n_records, t1, t2)
-  out$uncertainty_class <- classify_revised(out$n_records, out$n_years, out$n_counties, t1, t2, min_years, min_counties)
+  out$uncertainty_class <- classify_count(out$n_records, t1, t2)
   out <- cbind(out, lookup_reference(ref, out$host_plant, out$gbif_canonical))
   out$gbif_link <- gbif_url(out$acceptedKey)
   if (links) {
@@ -427,36 +518,57 @@ summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_ALL, t1 = 10, t2 = 50
   out
 }
 
-# ---- Parallel prefetch (optional speed-up for long host lists) --------------
-# Runs gbif_match() + gbif_no_summary() in background R sessions that share the
-# same disk cache; the subsequent sequential summarise_hosts() then only reads
-# the cache. Uses future/future.apply (multisession works on Windows).
-HM_FUNCTIONS_FILE <- normalizePath(tryCatch(sys.frame(1)$ofile, error = function(e) NULL) %||% "4_scripts/hostmap_functions.R", mustWork = FALSE)
+# ---- Bulk prefetch (light-weight concurrency for long host lists) -----------
+# Concurrent HTTP requests from the single R process (httr2::req_perform_parallel):
+# no extra R sessions, so it suits shinyapps.io. Results go into the same cache
+# the per-host functions read, so summarise_hosts() afterwards only reads.
+GBIF_API <- "https://api.gbif.org/v1"
 
-prefetch_gbif <- function(names, cache_dir, workers = 4, chunk_per_worker = 15,
-                          progress = NULL, functions_file = HM_FUNCTIONS_FILE) {
-  names <- unique(names)
-  if (workers <= 1 || length(names) < 2) return(invisible(NULL))
-  if (!requireNamespace("future.apply", quietly = TRUE)) return(invisible(NULL))
-  old <- future::plan(future::multisession, workers = workers)
-  on.exit(future::plan(old), add = TRUE)
-  chunk <- workers * chunk_per_worker
-  starts <- seq(1, length(names), by = chunk)
-  done <- 0
-  for (s in starts) {
-    part <- names[s:min(length(names), s + chunk - 1)]
-    groups <- split(part, rep_len(seq_len(workers), length(part)))
-    future.apply::future_lapply(groups, function(g) {
-      source(functions_file)
-      hm_init_cache(cache_dir)
-      for (nm in g) {
-        m <- tryCatch(gbif_match(nm, kingdom = "Plantae"), error = function(e) NULL)
-        if (!is.null(m) && !is.na(m$acceptedKey)) try(gbif_no_summary(m$acceptedKey), silent = TRUE)
-      }
-      NULL
-    }, future.seed = NULL)
-    done <- done + length(part)
-    if (!is.null(progress)) progress(done, length(names))
+.gbif_req <- function(path, query) {
+  request(paste0(GBIF_API, path)) |> req_url_query(!!!query, .multi = "explode") |>
+    req_user_agent("host_map shiny app (VKM)") |> req_timeout(60) |>
+    req_retry(max_tries = 5, is_transient = function(r) resp_status(r) %in% c(429, 500, 502, 503),
+              backoff = function(i) 2^i) |>
+    req_error(is_error = function(r) FALSE)
+}
+
+.ok_body <- function(r) if (inherits(r, "httr2_response") && resp_status(r) == 200) resp_body_string(r) else NULL
+
+.perform_bulk <- function(reqs, max_active, progress = NULL, label = "") {
+  if (!length(reqs)) return(list())
+  chunks <- split(seq_along(reqs), ceiling(seq_along(reqs) / 40))
+  out <- vector("list", length(reqs)); done <- 0
+  for (ch in chunks) {
+    out[ch] <- httr2::req_perform_parallel(reqs[ch], on_error = "continue", max_active = max_active, progress = FALSE)
+    done <- done + length(ch)
+    if (!is.null(progress)) progress(done, length(reqs), label)
+  }
+  out
+}
+
+prefetch_gbif <- function(names, kingdom = "Plantae", max_active = 4, country = "NO", progress = NULL) {
+  names <- unique(trimws(names))
+  todo <- names[vapply(names, function(n) is.null(.cache_get("match", n, kingdom)), TRUE)]
+  if (length(todo)) {
+    reqs <- lapply(todo, function(n) .gbif_req("/species/match", list(name = n, kingdom = kingdom, verbose = "true")))
+    resp <- .perform_bulk(reqs, max_active, progress, "names")
+    for (i in seq_along(todo)) {
+      txt <- .ok_body(resp[[i]]); if (is.null(txt)) next   # failures fall back to the rgbif path later
+      m <- tryCatch(.gbif_match_from_json(todo[i], kingdom, txt), error = function(e) NULL)
+      if (!is.null(m)) .cache_set(m, "match", todo[i], kingdom)
+    }
+  }
+  keys <- unique(na.omit(vapply(names, function(n) .cache_get("match", n, kingdom)$acceptedKey %||% NA_character_, "")))
+  keys <- keys[vapply(keys, function(k) is.null(.cache_get("nosum", k, country)), TRUE)]
+  if (length(keys)) {
+    reqs <- lapply(keys, function(k) .gbif_req("/occurrence/search", list(taxonKey = k, country = country, limit = 0,
+                      facet = c("basisOfRecord", "year", "gadmLevel1Gid"), facetLimit = 500)))
+    resp <- .perform_bulk(reqs, max_active, progress, "counts")
+    for (i in seq_along(keys)) {
+      txt <- .ok_body(resp[[i]]); if (is.null(txt)) next
+      s <- tryCatch(.summary_from_json(txt), error = function(e) NULL)
+      if (!is.null(s)) .cache_set(s, "nosum", keys[i], country)
+    }
   }
   invisible(NULL)
 }

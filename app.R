@@ -1,55 +1,51 @@
 # =============================================================================
 #  Host Map: host plants of a plant pest and their documentation in Norway
 #  Run with:  shiny::runApp()   (from the project folder)
+#  Deployable on shinyapps.io: single R process, no background workers.
 # =============================================================================
 
-# ---- CONFIGURATION (edit here) ----------------------------------------------
+# ---- CONFIGURATION (maintainers only; not exposed in the app) ---------------
 # EPPO Global Database API key (free registration at https://data.eppo.int/).
-# Either paste it here, or leave as-is and set the EPPO_API_KEY environment
-# variable (e.g. in ~/.Renviron). Do not commit a real key to git.
+# Set the EPPO_API_KEY environment variable (~/.Renviron locally; an .Renviron
+# file deployed with the app on shinyapps.io). Do not commit a real key to git.
 EPPO_API_KEY <- Sys.getenv("EPPO_API_KEY", unset = "")
 
-# Count thresholds for the uncertainty classes (records in Norway).
-#   0 = not documented, 1..T1 = high, T1+1..T2 = moderate, > T2 = low uncertainty
-DEFAULT_T1 <- 10
-DEFAULT_T2 <- 50
+# Uncertainty classification: FIXED, chosen by the statistical validation in
+# 5_outputs/REPORT.md (do not change without re-running 4_scripts/02_*.R).
+#   records counted = all basisOfRecord except LIVING_SPECIMEN and FOSSIL_SPECIMEN
+#   0 = not documented | 1-12 = high | 13-37 = moderate | >= 38 = low uncertainty
+#   (12 and 37 are where P(host really present in Norway) reaches 0.95 and 0.99)
+UNCERTAINTY_T1 <- 12L
+UNCERTAINTY_T2 <- 37L
 
-# Classification rule: "count" (original rule: count only) or "revised"
-# (count + temporal and spatial spread; see REPORT.md for the validation).
-DEFAULT_RULE <- "revised"
-DEFAULT_MIN_YEARS <- 10      # revised rule: distinct years with records
-DEFAULT_MIN_COUNTIES <- 2    # revised rule: distinct counties (GADM level 1)
-
-# basisOfRecord values counted by default. LIVING_SPECIMEN (botanic gardens)
-# and FOSSIL_SPECIMEN are excluded because they do not document occurrence in
-# Norwegian nature.
-DEFAULT_BASIS <- c("HUMAN_OBSERVATION", "PRESERVED_SPECIMEN", "OCCURRENCE",
-                   "MACHINE_OBSERVATION", "MATERIAL_SAMPLE", "OBSERVATION",
-                   "MATERIAL_CITATION")
-
-# Map: maximum coordinate uncertainty (m) and max points fetched per host layer
-DEFAULT_MAX_UNCERTAINTY_M <- 1000
-DEFAULT_KEEP_MISSING_UNCERTAINTY <- TRUE
-DEFAULT_MAX_POINTS <- 2000
-MAX_POINTS_HARD_LIMIT <- 5000
-MAP_DEFAULT_N_HOSTS <- 10    # hosts mapped when no table rows are selected
-MAP_DEFAULT_CATEGORIES <- "Major host"   # EPPO categories ticked on the map by default
-# Base maps: free, no API key. "relief" (default) is shaded terrain with no
-# roads, labels or land use; "osm" and "topo" are OpenStreetMap-based.
+# Map
+MAP_MAX_UNCERTAINTY_M <- 1000     # drop points with coordinate uncertainty above this
+MAP_KEEP_MISSING_UNCERTAINTY <- TRUE
+MAP_MAX_POINTS <- 1000            # per host layer (kept low for shinyapps.io)
+MAP_DEFAULT_N_HOSTS <- 5          # hosts mapped when no table rows are selected
+MAP_DEFAULT_CATEGORIES <- "Major host"
+# Base maps: free, no API key, loaded by URL (tested in the browser; CARTO and
+# Stadia now demand keys). Default: Esri World Light Gray Base, a light grey
+# canvas without labels, roads or land use.
+ESRI_ATTR <- "Tiles &copy; Esri &mdash; Esri, HERE, Garmin, &copy; OpenStreetMap contributors, and the GIS user community"
 MAP_TILES <- list(
-  relief = list(url = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Shaded_Relief/MapServer/tile/{z}/{y}/{x}",
-                attr = "Tiles &copy; Esri &mdash; Source: Esri"),
-  osm    = list(url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
-                attr = "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"),
-  topo   = list(url = "https://tile.opentopomap.org/{z}/{x}/{y}.png",
-                attr = "&copy; OpenStreetMap contributors, SRTM | style &copy; <a href='https://opentopomap.org'>OpenTopoMap</a> (CC-BY-SA)"))
+  grey    = list(name = "Light grey (minimal)", maxzoom = 16,
+                 url = "https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/{z}/{y}/{x}",
+                 attr = ESRI_ATTR),
+  terrain = list(name = "Terrain (soft)", maxzoom = 13,
+                 url = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Terrain_Base/MapServer/tile/{z}/{y}/{x}",
+                 attr = "Tiles &copy; Esri &mdash; Source: USGS, Esri, TANA, DeLorme, and NPS"),
+  osm     = list(name = "OpenStreetMap", maxzoom = 19,
+                 url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
+                 attr = "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"))
 
-# Performance: parallel GBIF workers for long host lists (1 = sequential)
-GBIF_WORKERS <- 4
-# Persistent cache for all API calls (GBIF, EPPO, Artsdatabanken)
+# Performance: concurrent GBIF requests from this one R process
+GBIF_MAX_ACTIVE <- 4
+# Cache for API calls (GBIF, EPPO, Artsdatabanken). On shinyapps.io this is
+# local to the running instance; it is simply rebuilt when an instance restarts.
 CACHE_DIR <- file.path(getwd(), "2_processed_data", "cache")
 CACHE_MAX_AGE_DAYS <- 30
-# Artsdatabanken reference (Red List 2021 + Alien Species List 2023)
+# Artsdatabanken reference (Red List 2021 + Alien Species List 2023), shipped with the app
 REFERENCE_FILE <- file.path(getwd(), "2_processed_data", "artsdatabanken_reference.rds")
 # ---- END CONFIGURATION ------------------------------------------------------
 
@@ -68,6 +64,7 @@ REFERENCE <- tryCatch({
   }
 }, error = function(e) { warning("Artsdatabanken reference unavailable: ", conditionMessage(e)); NULL })
 
+BASE_GROUPS <- unname(vapply(MAP_TILES, `[[`, "", "name"))
 
 # ---- UI ---------------------------------------------------------------------
 ui <- page(
@@ -78,32 +75,16 @@ ui <- page(
   sidebar = sidebar(width = 300, bg = VKM_COLOURS$background,
     textInput("pest", "Pest species (scientific name or EPPO code)", "", placeholder = "Species"),
     actionButton("go", "Search", class = "btn-primary w-100"),
-    hr(),
     checkboxGroupInput("cats", "EPPO host categories", choices = NULL),
-    accordion(open = FALSE,
-      accordion_panel("Configuration",
-        radioButtons("rule", "Classification rule",
-                     c("Revised (count + years + counties)" = "revised", "Count only" = "count"),
-                     selected = DEFAULT_RULE),
-        numericInput("t1", "Upper limit, high uncertainty (records)", DEFAULT_T1, min = 1),
-        numericInput("t2", "Upper limit, moderate uncertainty (records)", DEFAULT_T2, min = 2),
-        conditionalPanel("input.rule == 'revised'",
-          numericInput("min_years", "Revised: min. distinct years for low uncertainty", DEFAULT_MIN_YEARS, min = 1),
-          numericInput("min_counties", "Revised: min. counties for low uncertainty", DEFAULT_MIN_COUNTIES, min = 1)),
-        checkboxGroupInput("basis", "basisOfRecord counted", GBIF_BASIS_ALL, selected = DEFAULT_BASIS),
-        numericInput("max_unc", "Map: max coordinate uncertainty (m)", DEFAULT_MAX_UNCERTAINTY_M, min = 1),
-        checkboxInput("keep_na_unc", "Map: keep points without stated uncertainty", DEFAULT_KEEP_MISSING_UNCERTAINTY),
-        numericInput("max_pts", "Map: max points per host layer", DEFAULT_MAX_POINTS, min = 100, max = MAX_POINTS_HARD_LIMIT)
-      )
-    ),
-    hr(),
     downloadButton("dl_csv", "Download CSV", class = "btn-secondary w-100 mb-2"),
     downloadButton("dl_xlsx", "Download Excel", class = "btn-secondary w-100")
   ),
   header = tagList(uiOutput("messages"), uiOutput("summary_boxes")),
     nav_panel("Host plants",
       p(class = "small",
-        "Uncertainty class refers to ", strong("documented occurrence"), " in GBIF records from Norway. ",
+        "Uncertainty class refers to ", strong("documented occurrence"), " in GBIF records from Norway ",
+        sprintf("(0 records: not documented; 1–%d: high; %d–%d: moderate; ≥%d: low uncertainty). ",
+                UNCERTAINTY_T1, UNCERTAINTY_T1 + 1L, UNCERTAINTY_T2, UNCERTAINTY_T2 + 1L),
         "“Status in Norwegian nature” is a separate concept, taken from Artsdatabanken's Red List 2021 ",
         "and Alien Species List 2023, and says whether the plant is ", strong("established"), " in Norway."),
       DTOutput("tbl")),
@@ -125,16 +106,16 @@ ui <- page(
 
 # ---- Server -----------------------------------------------------------------
 server <- function(input, output, session) {
-  rv <- reactiveValues(pest = NULL, summaries = list(), messages = character(0), map_msg = NULL)
+  rv <- reactiveValues(pest = NULL, messages = character(0), map_msg = NULL)
   map_trigger <- reactiveVal(0)
   observeEvent(input$load_map, map_trigger(map_trigger() + 1))
 
-  # Step 1: resolve pest -> EPPO hosts -> GBIF summaries (heavy, cached)
+  # Resolve pest -> EPPO hosts -> GBIF summaries (cached)
   observeEvent(input$go, {
     rv$messages <- character(0); rv$pest <- NULL
     if (!nzchar(trimws(input$pest))) { rv$messages <- "Enter a species name (e.g. Erwinia amylovora) or an EPPO code (e.g. ERWIAM)."; return() }
     if (!nzchar(EPPO_API_KEY)) {
-      rv$messages <- "EPPO API key is missing. Set EPPO_API_KEY at the top of app.R or as an environment variable. Register at https://data.eppo.int/."
+      rv$messages <- "EPPO API key is missing. Set the EPPO_API_KEY environment variable. Register at https://data.eppo.int/."
       return()
     }
     res <- withProgress(message = "Resolving pest name", value = 0, {
@@ -145,14 +126,14 @@ server <- function(input, output, session) {
     rv$messages <- res$messages
     if (is.null(res$hosts) || !nrow(res$hosts)) return()
     hosts <- res$hosts
-    withProgress(message = sprintf("Querying GBIF for %d hosts", nrow(hosts)), value = 0, {
-      if (GBIF_WORKERS > 1 && nrow(hosts) > 20) {
-        prefetch_gbif(hosts$prefname, CACHE_DIR, workers = GBIF_WORKERS,
-                      progress = function(done, n) setProgress(0.8 * done / n, detail = sprintf("%d / %d (parallel)", done, n)))
-      }
-      tab <- tryCatch(summarise_hosts(hosts, basis_keep = GBIF_BASIS_ALL, ref = REFERENCE,
-                        progress = function(i, n, nm) setProgress(if (GBIF_WORKERS > 1 && n > 20) 0.8 + 0.2 * i / n else i / n, detail = nm)),
-                      error = function(e) { rv$messages <- c(rv$messages, paste("GBIF lookup failed:", conditionMessage(e))); NULL })
+    tab <- withProgress(message = sprintf("Querying GBIF for %d hosts", nrow(hosts)), value = 0, {
+      tryCatch({
+        prefetch_gbif(hosts$prefname, max_active = GBIF_MAX_ACTIVE,
+                      progress = function(done, n, what) setProgress(if (what == "names") 0.4 * done / n else 0.4 + 0.5 * done / n,
+                                                                     detail = sprintf("%s %d / %d", what, done, n)))
+        summarise_hosts(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = UNCERTAINTY_T1, t2 = UNCERTAINTY_T2, ref = REFERENCE,
+                        progress = function(i, n, nm) setProgress(0.9 + 0.1 * i / n, detail = nm))
+      }, error = function(e) { rv$messages <- c(rv$messages, paste("GBIF lookup failed:", conditionMessage(e))); NULL })
     })
     if (is.null(tab)) return()
     n_unres <- sum(is.na(tab$acceptedKey))
@@ -167,23 +148,7 @@ server <- function(input, output, session) {
     map_trigger(map_trigger() + 1)   # draw the default map straight after a search
   })
 
-  # Step 2: re-count by basisOfRecord and re-classify (cheap, from cache)
-  results <- reactive({
-    req(rv$base)
-    tab <- rv$base
-    basis <- if (length(input$basis)) input$basis else DEFAULT_BASIS
-    t1 <- max(1, input$t1 %||% DEFAULT_T1); t2 <- max(t1 + 1, input$t2 %||% DEFAULT_T2)
-    tab$n_records <- vapply(seq_len(nrow(tab)), function(i) {
-      if (is.na(tab$acceptedKey[i])) return(NA_integer_)
-      s <- tryCatch(gbif_no_summary(tab$acceptedKey[i]), error = function(e) NULL)
-      if (is.null(s)) NA_integer_ else as.integer(sum(s$basis[names(s$basis) %in% basis]))
-    }, 0L)
-    tab$count_class <- classify_count(tab$n_records, t1, t2)
-    tab$uncertainty_class <- if (identical(input$rule, "count")) tab$count_class else
-      classify_revised(tab$n_records, tab$n_years, tab$n_counties, t1, t2,
-                       input$min_years %||% DEFAULT_MIN_YEARS, input$min_counties %||% DEFAULT_MIN_COUNTIES)
-    tab
-  })
+  results <- reactive({ req(rv$base); rv$base })
 
   filtered <- reactive({
     tab <- results()
@@ -197,10 +162,11 @@ server <- function(input, output, session) {
 
   output$summary_boxes <- renderUI({
     req(rv$pest)
-    tab <- filtered(); gb <- rv$pest$gbif
+    tab <- filtered(); ep <- rv$pest$eppo; gb <- rv$pest$gbif
     layout_columns(fill = FALSE,
-      value_box("Pest", tags$i(gb$gbif_canonical %||% input$pest),
-                p(sprintf("EPPO: %s | GBIF key: %s", rv$pest$eppo$code, gb$acceptedKey %||% "-"))),
+      value_box("Pest (EPPO)", tags$i(ep$prefname %||% input$pest),
+                p(if (!is.na(ep$norwegian %||% NA)) paste0(ep$norwegian, " · ") else NULL,
+                  sprintf("EPPO: %s | GBIF key: %s", ep$code, gb$acceptedKey %||% "-"))),
       value_box("Hosts (filtered)", nrow(tab)),
       value_box("Documented in Norway (≥1 record)", sum(tab$n_records > 0, na.rm = TRUE)),
       value_box("Established in Norway (Artsdatabanken)", sum(tab$ref_status == "Established", na.rm = TRUE)))
@@ -209,7 +175,7 @@ server <- function(input, output, session) {
   display_table <- reactive({
     tab <- filtered()
     data.frame(
-      `Host plant` = tab$host_plant,
+      `Host plant (EPPO)` = tab$host_plant,
       `EPPO category` = droplevels(tab$eppo_category),
       `GBIF name` = tab$gbif_name,
       `Match note` = tab$note,
@@ -235,33 +201,31 @@ server <- function(input, output, session) {
   export_table <- reactive({
     tab <- filtered()
     tab$bibref <- NULL
-    tab
+    cbind(pest_eppo_name = rv$pest$eppo$prefname %||% NA, pest_eppo_code = rv$pest$eppo$code %||% NA, tab)
   })
   output$dl_csv <- downloadHandler(
-    filename = function() sprintf("hosts_%s_%s.csv", gsub("\\W+", "_", input$pest), Sys.Date()),
+    filename = function() sprintf("hosts_%s_%s.csv", gsub("\\W+", "_", rv$pest$eppo$prefname %||% input$pest), Sys.Date()),
     content = function(file) utils::write.csv(export_table(), file, row.names = FALSE, na = ""))
   output$dl_xlsx <- downloadHandler(
-    filename = function() sprintf("hosts_%s_%s.xlsx", gsub("\\W+", "_", input$pest), Sys.Date()),
+    filename = function() sprintf("hosts_%s_%s.xlsx", gsub("\\W+", "_", rv$pest$eppo$prefname %||% input$pest), Sys.Date()),
     content = function(file) {
-      meta <- data.frame(setting = c("pest", "eppo_code", "date", "rule", "t1", "t2", "min_years", "min_counties", "basisOfRecord"),
-                         value = c(input$pest, rv$pest$eppo$code %||% "", as.character(Sys.time()), input$rule,
-                                   input$t1, input$t2, input$min_years, input$min_counties, paste(input$basis, collapse = ";")))
+      meta <- data.frame(
+        setting = c("pest (EPPO preferred name)", "EPPO code", "date", "records counted", "uncertainty classes", "method"),
+        value = c(rv$pest$eppo$prefname %||% input$pest, rv$pest$eppo$code %||% "", as.character(Sys.time()),
+                  paste(GBIF_BASIS_COUNTED, collapse = "; "),
+                  sprintf("0 not documented; 1-%d high; %d-%d moderate; >=%d low", UNCERTAINTY_T1, UNCERTAINTY_T1 + 1L, UNCERTAINTY_T2, UNCERTAINTY_T2 + 1L),
+                  "Thresholds calibrated so that P(present in Norway) = 0.95 / 0.99 at the class boundaries (see REPORT.md)"))
       writexl::write_xlsx(list(hosts = export_table(), settings = meta), file)
     })
 
   # ---- Map ----
   output$hostmap <- renderLeaflet({
-    # Key-free tiles loaded by URL (no provider plugin). Default: shaded relief
-    # only (no roads, labels or land use); OSM-based alternatives selectable.
-    leaflet() |>
-      addTiles(MAP_TILES$relief$url, attribution = MAP_TILES$relief$attr, group = "Terrain (relief only)",
-               options = tileOptions(maxNativeZoom = 13)) |>
-      addTiles(MAP_TILES$osm$url, attribution = MAP_TILES$osm$attr, group = "OpenStreetMap") |>
-      addTiles(MAP_TILES$topo$url, attribution = MAP_TILES$topo$attr, group = "OpenTopoMap (OSM terrain)",
-               options = tileOptions(maxNativeZoom = 17)) |>
-      addLayersControl(baseGroups = c("Terrain (relief only)", "OpenStreetMap", "OpenTopoMap (OSM terrain)"),
-                       options = layersControlOptions(collapsed = TRUE)) |>
-      setView(lng = 12, lat = 65, zoom = 4)
+    m <- leaflet()
+    for (t in MAP_TILES) m <- addTiles(m, t$url, attribution = t$attr, group = t$name,
+                                       options = tileOptions(maxNativeZoom = t$maxzoom))
+    m |> addLayersControl(baseGroups = BASE_GROUPS, options = layersControlOptions(collapsed = TRUE)) |>
+      showGroup(BASE_GROUPS[1]) |> hideGroup(BASE_GROUPS[-1]) |>
+      setView(lng = 14, lat = 65, zoom = 4)
   })
   outputOptions(output, "hostmap", suspendWhenHidden = FALSE)
   output$map_msg <- renderUI({ if (length(rv$map_msg)) div(class = "alert alert-secondary py-2", HTML(paste(rv$map_msg, collapse = "<br>"))) })
@@ -279,18 +243,16 @@ server <- function(input, output, session) {
       head(t2[order(-t2$n_records), ], MAP_DEFAULT_N_HOSTS)
     }
     hosts <- hosts[!is.na(hosts$acceptedKey) & hosts$n_records > 0, ]
-    max_pts <- min(MAX_POINTS_HARD_LIMIT, input$max_pts %||% DEFAULT_MAX_POINTS)
-    basis <- if (length(input$basis)) input$basis else DEFAULT_BASIS
     msgs <- character(0)
     pts <- withProgress(message = "Fetching occurrence points", value = 0, {
       lapply(seq_len(nrow(hosts)), function(i) {
         setProgress(i / nrow(hosts), detail = hosts$host_plant[i])
-        p <- tryCatch(gbif_points(hosts$acceptedKey[i], max_pts, basis), error = function(e) NULL)
+        p <- tryCatch(gbif_points(hosts$acceptedKey[i], MAP_MAX_POINTS, GBIF_BASIS_COUNTED), error = function(e) NULL)
         if (is.null(p)) { msgs <<- c(msgs, sprintf("Failed to fetch points for %s.", hosts$host_plant[i])); return(NULL) }
-        d <- clean_points(p$data, input$max_unc, input$keep_na_unc, max_pts)
-        if (p$n_available > max_pts)
-          msgs <<- c(msgs, sprintf("<i>%s</i>: %s georeferenced records available; at most %d fetched per basisOfRecord, %d shown after de-duplication and precision filter.",
-                                   hosts$host_plant[i], format(p$n_available, big.mark = " "), max_pts, NROW(d)))
+        d <- clean_points(p$data, MAP_MAX_UNCERTAINTY_M, MAP_KEEP_MISSING_UNCERTAINTY, MAP_MAX_POINTS)
+        if (p$n_available > MAP_MAX_POINTS)
+          msgs <<- c(msgs, sprintf("<i>%s</i>: %s georeferenced records available; the first %d were fetched, %d shown after de-duplication and precision filter.",
+                                   hosts$host_plant[i], format(p$n_available, big.mark = " "), MAP_MAX_POINTS, NROW(d)))
         if (is.null(d) || !nrow(d)) return(NULL)
         d$host <- hosts$host_plant[i]; d$eppo_category <- as.character(hosts$eppo_category[i])
         d$uncertainty_class <- as.character(hosts$uncertainty_class[i])
@@ -311,12 +273,13 @@ server <- function(input, output, session) {
     groups <- unique(d$host)
     proxy |>
       addCircleMarkers(data = d, lng = ~decimalLongitude, lat = ~decimalLatitude, group = ~host,
-                       radius = 4, stroke = FALSE, fillOpacity = 0.7, color = pal(d[[by]]),
+                       radius = 4, stroke = TRUE, weight = 0.5, color = "black", opacity = 0.6,
+                       fillOpacity = 0.8, fillColor = pal(d[[by]]),
                        popup = ~sprintf("<b><i>%s</i></b><br>%s<br>Year: %s<br>%s<br>Uncertainty: %s m",
                                         host, eppo_category, year, basisOfRecord, coordinateUncertaintyInMeters)) |>
       addLegend("bottomright", pal = pal, values = d[[by]], title = if (by == "uncertainty_class") "Uncertainty class" else "EPPO category") |>
-      addLayersControl(baseGroups = c("Terrain (relief only)", "OpenStreetMap", "OpenTopoMap (OSM terrain)"),
-                       overlayGroups = groups, options = layersControlOptions(collapsed = length(groups) > 6))
+      addLayersControl(baseGroups = BASE_GROUPS, overlayGroups = groups,
+                       options = layersControlOptions(collapsed = length(groups) > 6))
   })
 }
 

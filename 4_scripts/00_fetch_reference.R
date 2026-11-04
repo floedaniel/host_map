@@ -24,3 +24,8 @@ fab <- odata_all("AlienSpeciesAssessment2023",
 cat("Alien plant rows:", nrow(fab), "\n"); print(table(fab$speciesStatus)); print(table(fab$alienSpeciesCategory))
 names(fab)
 saveRDS(list(redlist = rl, alien = fab), "1_raw_data/artsdatabanken_raw.rds")  # run from project root
+
+# Build the processed reference table used by the app (status per plant name)
+source("4_scripts/hostmap_functions.R")
+ref <- build_reference(readRDS("1_raw_data/artsdatabanken_raw.rds"), path = "2_processed_data/artsdatabanken_reference.rds")
+cat("Reference rows:", nrow(ref), "\n")

@@ -1,402 +1,0 @@
-Erwinia amylovora            ERWIAM    62 hosts  
-Popillia japonica            POPIJA   100 hosts  
-Phytophthora ramorum         PHYTRA   190 hosts  
-Agrilus planipennis          AGRLPL    21 hosts  
-Xylella fastidiosa           XYLEFA   603 hosts  
-Anoplophora glabripennis     ANOLGL    72 hosts  
-Anoplophora chinensis        ANOLCN   186 hosts  
-Bursaphelenchus xylophilus   BURSXY    55 hosts  
-Dendrolimus sibiricus        DENDSI    21 hosts  
-Thaumetopoea processionea    THAUPR    18 hosts  
-Lymantria dispar             LYMADI    12 hosts  
-Leptinotarsa decemlineata    LPTNDE     8 hosts  
-Globodera rostochiensis      HETDRO     8 hosts  
-Ralstonia solanacearum       RALSSL    76 hosts  
-Synchytrium endobioticum     SYNCEN    13 hosts  
-Aromia bungii                AROMBU    26 hosts  
-Phytophthora kernoviae       PHYTKE    40 hosts  
-Bactrocera dorsalis          DACUDO   476 hosts  
-Spodoptera frugiperda        LAPHFR   358 hosts  
-Ceratocystis platani         CERAFP     4 hosts  
-1867 unique host names; prefetching GBIF in parallel ...
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  90/1867  0.2 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  180/1867  0.6 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  270/1867  1.0 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  360/1867  1.4 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  450/1867  1.7 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  540/1867  2.0 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  630/1867  2.5 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  720/1867  2.9 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  810/1867  3.2 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  900/1867  3.6 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  990/1867  4.0 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1080/1867  4.4 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1170/1867  4.8 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1260/1867  5.3 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1350/1867  5.7 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1440/1867  6.2 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1530/1867  6.7 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1620/1867  7.2 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1710/1867  7.6 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1800/1867  8.1 min
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Waiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secWaiting [=    ] 1/5 secWaiting [==   ] 2/5 secWaiting [===  ] 3/5 secWaiting [==== ] 4/5 secWaiting [=====] 5/5 secToo many requests! To download GBIF occurrence data in bulk, please use occ_download().
-Too many requests! To download GBIF occurrence data in bulk, please use occ_download().
-  1867/1867  8.8 min
-Re-matching 1527 unlisted hosts via Nortaxa ...
