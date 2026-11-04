@@ -1,13 +1,13 @@
 # =============================================================================
 #  Host Map: host plants of a plant pest and their documentation in Norway
 #  Run with:  shiny::runApp()   (from the project folder)
-#  Deployable on shinyapps.io: single R process, no background workers.
+#  Deployed on Posit Shiny Server (see README.md, "Deploying on Posit Shiny Server").
 # =============================================================================
 
 # ---- CONFIGURATION (maintainers only; not exposed in the app) ---------------
 # EPPO Global Database API key (free registration at https://data.eppo.int/).
-# Set the EPPO_API_KEY environment variable (~/.Renviron locally; an .Renviron
-# file deployed with the app on shinyapps.io). Do not commit a real key to git.
+# Set the EPPO_API_KEY environment variable: ~/.Renviron locally; on Shiny
+# Server an .Renviron file in the app folder (git-ignored). Never commit a key.
 EPPO_API_KEY <- Sys.getenv("EPPO_API_KEY", unset = "")
 
 # Uncertainty classification: FIXED, chosen by the statistical validation in
@@ -21,7 +21,7 @@ UNCERTAINTY_T2 <- 40L
 # Map
 MAP_MAX_UNCERTAINTY_M <- 1000     # drop points with coordinate uncertainty above this
 MAP_KEEP_MISSING_UNCERTAINTY <- TRUE
-MAP_MAX_POINTS <- 1000            # per host layer (kept low for shinyapps.io)
+MAP_MAX_POINTS <- 1000            # per host layer (keeps server and browser light)
 MAP_DEFAULT_N_HOSTS <- 5          # hosts mapped by default (most records first)
 MAP_MAX_HOSTS <- 10               # max host species on the map at once (distinct colours)
 MAP_DEFAULT_CATEGORIES <- "Major host"
@@ -40,11 +40,19 @@ MAP_TILES <- list(
                  url = "https://tile.openstreetmap.org/{z}/{x}/{y}.png",
                  attr = "&copy; <a href='https://www.openstreetmap.org/copyright'>OpenStreetMap</a> contributors"))
 
-# Performance: concurrent GBIF requests from this one R process
+# Performance: at most this many concurrent GBIF/Nortaxa requests
 GBIF_MAX_ACTIVE <- 4
-# Cache for API calls (GBIF, EPPO, Artsdatabanken). On shinyapps.io this is
-# local to the running instance; it is simply rebuilt when an instance restarts.
-CACHE_DIR <- file.path(getwd(), "2_processed_data", "cache")
+# Searches run in background R processes (Shiny ExtendedTask + future), so a
+# long first search (e.g. 600 hosts) does not freeze the app for other users of
+# the shared Shiny Server process. SEARCH_WORKERS bounds the extra R processes;
+# more simultaneous searches than that wait in a queue. Set BACKGROUND_SEARCH to
+# FALSE to run searches inside the app process instead.
+BACKGROUND_SEARCH <- TRUE
+SEARCH_WORKERS <- 2
+# Cache for API calls (GBIF, EPPO, Artsdatabanken). Must be writable by the
+# 'shiny' user; set HOSTMAP_CACHE_DIR (e.g. in the app's .Renviron) to override.
+# If it is not writable the app falls back to a temporary folder.
+CACHE_DIR <- Sys.getenv("HOSTMAP_CACHE_DIR", unset = file.path(getwd(), "2_processed_data", "cache"))
 CACHE_MAX_AGE_DAYS <- 30
 # Artsdatabanken reference (Red List 2021 + Alien Species List 2023), shipped with the app
 REFERENCE_FILE <- file.path(getwd(), "2_processed_data", "artsdatabanken_reference.rds")
@@ -54,9 +62,24 @@ library(shiny)
 library(bslib)
 library(DT)
 library(leaflet)
-source("4_scripts/hostmap_functions.R")
+FUNCTIONS_FILE <- normalizePath("4_scripts/hostmap_functions.R")
+source(FUNCTIONS_FILE)
 source("4_scripts/theme.R")
-hm_init_cache(CACHE_DIR, CACHE_MAX_AGE_DAYS)
+CACHE_DIR <- hm_init_cache(CACHE_DIR, CACHE_MAX_AGE_DAYS)   # actual (writable) folder
+
+USE_BACKGROUND <- BACKGROUND_SEARCH && requireNamespace("future", quietly = TRUE) &&
+  requireNamespace("promises", quietly = TRUE) && packageVersion("shiny") >= "1.8.1"
+if (USE_BACKGROUND) future::plan(future::multisession, workers = SEARCH_WORKERS)
+
+# The background job: a fresh R process sources the functions and shares the
+# disk cache with the app.
+background_search <- function(pest, api_key, ref, t1, t2, max_active, cache_dir, cache_age, fun_file, progress_file) {
+  promises::future_promise({
+    source(fun_file, local = TRUE)
+    hm_init_cache(cache_dir, cache_age)
+    run_search(pest, api_key, ref, t1, t2, max_active, progress = progress_writer(progress_file))
+  }, seed = NULL)
+}
 
 REFERENCE <- tryCatch({
   if (file.exists(REFERENCE_FILE)) readRDS(REFERENCE_FILE) else {
@@ -72,15 +95,15 @@ ui <- page(
   theme = hm_theme(),
   tags$head(tags$link(rel = "stylesheet", href = "vkm.css")),
   vkm_header("Host Map", "Host plants of plant pests and how well they are documented in Norway"),
-  div(class = "vkm-navbar", navset_bar(id = "tabs", bg = VKM_COLOURS$paper, fillable = FALSE,
+  div(class = "vkm-navbar", navset_bar(id = "tabs", fillable = FALSE,
   sidebar = sidebar(width = 300, bg = VKM_COLOURS$paper,
     textInput("pest", "Pest species (scientific name or EPPO code)", "", placeholder = "Species"),
-    actionButton("go", "Search", class = "btn-primary w-100"),
+    input_task_button("go", "Search", label_busy = "Searching\u2026", class = "btn-primary w-100", type = "primary"),
     checkboxGroupInput("cats", "EPPO host categories", choices = NULL),
     downloadButton("dl_csv", "Download CSV", class = "btn-secondary w-100 mb-2"),
     downloadButton("dl_xlsx", "Download Excel", class = "btn-secondary w-100")
   ),
-  header = tagList(uiOutput("messages"), uiOutput("summary_boxes")),
+  header = tagList(uiOutput("search_progress"), uiOutput("messages"), uiOutput("summary_boxes")),
     nav_panel("Host plants",
       p(class = "hm-note",
         "Uncertainty class refers to ", strong("documented occurrence"), " in GBIF records from Norway ",
@@ -115,35 +138,54 @@ server <- function(input, output, session) {
   map_trigger <- reactiveVal(0)
   observeEvent(input$load_map, map_trigger(map_trigger() + 1))
 
-  # Resolve pest -> EPPO hosts -> GBIF summaries (cached)
+  # ---- Search: pest -> EPPO hosts -> GBIF summaries (cached) ----
+  progress_file <- tempfile("hostmap_progress_", fileext = ".txt")
+  session$onSessionEnded(function() unlink(progress_file))
+  search_task <- ExtendedTask$new(function(pest) {
+    background_search(pest, EPPO_API_KEY, REFERENCE, UNCERTAINTY_T1, UNCERTAINTY_T2, GBIF_MAX_ACTIVE,
+                      CACHE_DIR, CACHE_MAX_AGE_DAYS, FUNCTIONS_FILE, progress_file)
+  })
+  bind_task_button(search_task, "go")
+
   observeEvent(input$go, {
-    rv$messages <- character(0); rv$pest <- NULL
+    rv$messages <- character(0); rv$pest <- NULL; rv$base <- NULL
     if (!nzchar(trimws(input$pest))) { rv$messages <- "Enter a species name (e.g. Erwinia amylovora) or an EPPO code (e.g. ERWIAM)."; return() }
     if (!nzchar(EPPO_API_KEY)) {
       rv$messages <- "EPPO API key is missing. Set the EPPO_API_KEY environment variable. Register at https://data.eppo.int/."
       return()
     }
-    res <- withProgress(message = "Resolving pest name", value = 0, {
-      tryCatch(get_pest_hosts(input$pest, EPPO_API_KEY),
-               error = function(e) list(error = conditionMessage(e)))
-    })
-    if (!is.null(res$error)) { rv$messages <- res$error; return() }
-    rv$messages <- res$messages
-    if (is.null(res$hosts) || !nrow(res$hosts)) return()
-    hosts <- res$hosts
-    tab <- withProgress(message = sprintf("Querying GBIF for %d hosts", nrow(hosts)), value = 0, {
-      tryCatch({
-        prefetch_gbif(hosts$prefname, max_active = GBIF_MAX_ACTIVE,
-                      progress = function(done, n, what) setProgress(if (what == "names") 0.4 * done / n else 0.4 + 0.5 * done / n,
-                                                                     detail = sprintf("%s %d / %d", what, done, n)))
-        summarise_hosts(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = UNCERTAINTY_T1, t2 = UNCERTAINTY_T2, ref = REFERENCE, api_key = EPPO_API_KEY,
-                        progress = function(i, n, nm) setProgress(0.9 + 0.1 * i / n, detail = nm))
-      }, error = function(e) { rv$messages <- c(rv$messages, paste("GBIF lookup failed:", conditionMessage(e))); NULL })
-    })
-    if (is.null(tab)) return()
-    n_unres <- sum(is.na(tab$acceptedKey))
-    if (n_unres) rv$messages <- c(rv$messages, sprintf("%d host name(s) could not be resolved to a GBIF taxon (see the 'Match note' column).", n_unres))
-    rv$pest <- res
+    if (USE_BACKGROUND) {
+      writeLines(c("0", "Starting search"), progress_file)
+      search_task$invoke(trimws(input$pest))
+    } else {
+      out <- withProgress(message = "Searching", value = 0,
+        run_search(trimws(input$pest), EPPO_API_KEY, REFERENCE, UNCERTAINTY_T1, UNCERTAINTY_T2, GBIF_MAX_ACTIVE,
+                   progress = function(f, txt) setProgress(f, detail = txt)))
+      apply_search(out)
+    }
+  })
+
+  # Progress of a background search, read from the progress file
+  output$search_progress <- renderUI({
+    if (!USE_BACKGROUND || search_task$status() != "running") return(NULL)
+    invalidateLater(700)
+    pr <- progress_read(progress_file) %||% list(fraction = 0, text = "Starting search")
+    div(class = "hm-progress", role = "status",
+      div(class = "hm-progress-bar", div(class = "hm-progress-fill", style = sprintf("width:%d%%", round(100 * (pr$fraction %||% 0))))),
+      span(pr$text))
+  })
+
+  observeEvent(search_task$status(), {
+    st <- search_task$status()
+    if (st == "success") apply_search(search_task$result())
+    if (st == "error") rv$messages <- paste("The search failed:", tryCatch({ search_task$result(); "" }, error = function(e) conditionMessage(e)))
+  })
+
+  apply_search <- function(out) {
+    rv$messages <- out$messages
+    tab <- out$table
+    if (is.null(tab) || !nrow(tab)) return()
+    rv$pest <- out$pest
     rv$base <- tab
     cats <- levels(droplevels(tab$eppo_category))
     updateCheckboxGroupInput(session, "cats", choices = cats, selected = cats)
@@ -155,7 +197,7 @@ server <- function(input, output, session) {
     updateSelectizeInput(session, "map_hosts", choices = ch, selected = rv$map_hosts_default, server = TRUE)
     rv$map_auto <- TRUE
     map_trigger(map_trigger() + 1)   # draw the default map straight after a search
-  })
+  }
 
   results <- reactive({ req(rv$base); rv$base })
 
@@ -250,7 +292,7 @@ server <- function(input, output, session) {
 
   # ---- Map ----
   output$hostmap <- renderLeaflet({
-    m <- leaflet()
+    m <- leaflet(options = leafletOptions(preferCanvas = TRUE))   # canvas: fast with thousands of points
     for (t in MAP_TILES) m <- addTiles(m, t$url, attribution = t$attr, group = t$name,
                                        options = tileOptions(maxNativeZoom = t$maxzoom))
     m |> addLayersControl(baseGroups = BASE_GROUPS, options = layersControlOptions(collapsed = TRUE)) |>

@@ -6,7 +6,7 @@ This vignette uses emerald ash borer as the example. It shows how to read the ap
 
 ## 1. Search
 
-Type a pest name or an EPPO code in **Pest species** and press **Search**. Synonyms work. Here *Agrilus marcopoli* was entered; GBIF reports it as a synonym of *Agrilus planipennis*, and the app says so in an orange note. The heading is always the EPPO preferred name, followed by the Norwegian name (if EPPO has one), the EPPO code and the GBIF key.
+Type a pest name or an EPPO code in **Pest species** and press **Search**. A progress bar shows how far the search has come. The first search for a pest with hundreds of hosts can take a minute or two; after that the results are cached and appear at once. Other people can keep using the app meanwhile. Synonyms work. Here *Agrilus marcopoli* was entered; GBIF reports it as a synonym of *Agrilus planipennis*, and the app says so in an orange note. The heading is always the EPPO preferred name, followed by the Norwegian name (if EPPO has one), the EPPO code and the GBIF key.
 
 ![Host table](img/01_hosts.png)
 

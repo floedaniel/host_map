@@ -23,10 +23,23 @@ suppressPackageStartupMessages({
 
 hm_init_cache <- function(dir = file.path(tempdir(), "hostmap_cache"),
                           max_age_days = 30) {
-  dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+  # On Posit Shiny Server the app runs as the 'shiny' user, which may not be
+  # allowed to write inside the app folder. Fall back to a temporary folder
+  # (still works, but is emptied when the R process restarts).
+  ok <- isTRUE(tryCatch({
+    dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+    f <- tempfile("w", tmpdir = dir); writeLines("ok", f); unlink(f); TRUE
+  }, error = function(e) FALSE, warning = function(w) FALSE))
+  if (!ok) {
+    fallback <- file.path(tempdir(), "hostmap_cache")
+    message("Host Map: cache folder '", dir, "' is not writable; using ", fallback,
+            ". Set HOSTMAP_CACHE_DIR to a folder the 'shiny' user can write.")
+    dir <- fallback; dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+  }
+  .hm$dir <- normalizePath(dir, mustWork = FALSE)
   .hm$cache <- cachem::cache_disk(dir, max_age = max_age_days * 86400)
   .hm$memo <- list()
-  invisible(.hm$cache)
+  invisible(.hm$dir)
 }
 
 # memoise wrapper that is created on first use against the current cache.
@@ -413,19 +426,39 @@ lookup_reference <- function(ref, eppo_name, gbif_canonical) {
 }
 
 # ---- Artsdatabanken taxon IDs / Artskart links -------------------------------
-.nortaxa_id_impl <- function(name) {
-  resp <- tryCatch(
-    request("https://nortaxa.artsdatabanken.no/api/v1/TaxonName/Search") |>
-      req_url_query(Search = name) |> req_timeout(20) |> req_perform(),
-    error = function(e) NULL)
-  if (is.null(resp)) return(NA_integer_)
-  x <- fromJSON(resp_body_string(resp), simplifyVector = FALSE)
+NORTAXA_SEARCH <- "https://nortaxa.artsdatabanken.no/api/v1/TaxonName/Search"
+
+.nortaxa_parse <- function(txt, name) {
+  x <- tryCatch(fromJSON(txt, simplifyVector = FALSE), error = function(e) NULL)
   if (!length(x)) return(NA_integer_)
-  # prefer an exact accepted-name match
-  for (t in x) if (identical(t$acceptedScientificName$name, name)) return(as.integer(t$taxonId))
-  as.integer(x[[1]]$taxonId)
+  for (t in x) if (identical(t$acceptedScientificName$name, name)) return(as.integer(t$taxonId))  # exact accepted name first
+  as.integer(x[[1]]$taxonId %||% NA_integer_)
 }
-nortaxa_id <- hm_memo("nortaxa_id", .nortaxa_id_impl)
+
+nortaxa_id <- function(name) {
+  v <- .cache_get("nortaxa", name); if (!is.null(v)) return(v)
+  resp <- tryCatch(request(NORTAXA_SEARCH) |> req_url_query(Search = name) |> req_timeout(20) |> req_perform(),
+                   error = function(e) NULL)
+  if (is.null(resp)) return(NA_integer_)                     # not cached: retried next time
+  .cache_set(.nortaxa_parse(resp_body_string(resp), name), "nortaxa", name)
+}
+
+#' Fill the Artsdatabanken taxon-ID cache for many names at once (concurrent).
+prefetch_nortaxa <- function(names, max_active = 4) {
+  names <- unique(na.omit(names))
+  todo <- names[vapply(names, function(n) is.null(.cache_get("nortaxa", n)), TRUE)]
+  if (!length(todo)) return(invisible(NULL))
+  reqs <- lapply(todo, function(n) request(NORTAXA_SEARCH) |> req_url_query(Search = n) |>
+                   req_user_agent("host_map shiny app (VKM)") |> req_timeout(30) |>
+                   req_retry(max_tries = 3, is_transient = function(r) resp_status(r) %in% c(429, 500, 502, 503)) |>
+                   req_error(is_error = function(r) FALSE))
+  resp <- .perform_bulk(reqs, max_active)
+  for (i in seq_along(todo)) {
+    txt <- .ok_body(resp[[i]]); if (is.null(txt)) next
+    .cache_set(.nortaxa_parse(txt, todo[i]), "nortaxa", todo[i])
+  }
+  invisible(NULL)
+}
 
 gbif_url <- function(key) ifelse(is.na(key), NA_character_,
   sprintf("https://www.gbif.org/occurrence/search?taxon_key=%s&country=NO", key))
@@ -567,6 +600,8 @@ summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = HM_T1, 
   out$gbif_link <- gbif_url(out$acceptedKey)
   if (links) {
     nm_link <- ifelse(is.na(out$gbif_canonical), out$host_plant, out$gbif_canonical)
+    has_rec <- !is.na(out$n_records) & out$n_records > 0
+    prefetch_nortaxa(nm_link[has_rec])
     tid <- vapply(seq_len(nrow(out)), function(i)
       if (!is.na(out$n_records[i]) && out$n_records[i] > 0) nortaxa_id(nm_link[i]) else NA_integer_, 0L)
     out$artskart_link <- artskart_url(tid, nm_link)
@@ -575,9 +610,9 @@ summarise_hosts <- function(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = HM_T1, 
 }
 
 # ---- Bulk prefetch (light-weight concurrency for long host lists) -----------
-# Concurrent HTTP requests from the single R process (httr2::req_perform_parallel):
-# no extra R sessions, so it suits shinyapps.io. Results go into the same cache
-# the per-host functions read, so summarise_hosts() afterwards only reads.
+# Concurrent HTTP requests from one R process (httr2::req_perform_parallel), no
+# extra R sessions. Results go into the same cache the per-host functions read,
+# so summarise_hosts() afterwards only reads.
 GBIF_API <- "https://api.gbif.org/v1"
 
 .gbif_req <- function(path, query) {
@@ -626,4 +661,45 @@ prefetch_gbif <- function(names, kingdom = "Plantae", max_active = 4, country = 
     }
   }
   invisible(NULL)
+}
+
+
+# ---- One complete search -----------------------------------------------------
+#' Run a full search: pest -> EPPO hosts -> GBIF -> classification.
+#' `progress(fraction, text)` is called along the way. Returns a list with
+#' `pest` (from get_pest_hosts), `table` (or NULL) and `messages`.
+#' Self-contained so it can run in a background R process (Shiny ExtendedTask).
+run_search <- function(pest, api_key, ref = NULL, t1 = HM_T1, t2 = HM_T2, max_active = 4,
+                       progress = function(fraction, text) NULL) {
+  progress(0.02, "Resolving pest name")
+  res <- tryCatch(get_pest_hosts(pest, api_key), error = function(e) list(error = conditionMessage(e)))
+  if (!is.null(res$error)) return(list(pest = NULL, table = NULL, messages = res$error))
+  msgs <- res$messages
+  if (is.null(res$hosts) || !nrow(res$hosts)) return(list(pest = NULL, table = NULL, messages = msgs))
+  hosts <- res$hosts
+  tab <- tryCatch({
+    prefetch_gbif(hosts$prefname, max_active = max_active,
+                  progress = function(done, n, what)
+                    progress(if (what == "names") 0.05 + 0.35 * done / n else 0.4 + 0.45 * done / n,
+                             sprintf("GBIF %s: %d of %d hosts", what, done, n)))
+    progress(0.86, "Classifying hosts and looking up Artskart links")
+    summarise_hosts(hosts, basis_keep = GBIF_BASIS_COUNTED, t1 = t1, t2 = t2, ref = ref, api_key = api_key,
+                    progress = function(i, n, nm) if (i %% 25 == 0 || i == n) progress(0.86 + 0.14 * i / n, sprintf("Classifying %d of %d hosts", i, n)))
+  }, error = function(e) { msgs <<- c(msgs, paste("GBIF lookup failed:", conditionMessage(e))); NULL })
+  if (!is.null(tab)) {
+    n_unres <- sum(is.na(tab$acceptedKey))
+    if (n_unres) msgs <- c(msgs, sprintf("%d host name(s) could not be resolved to a GBIF taxon (see the 'Match note' column).", n_unres))
+  }
+  progress(1, "Done")
+  list(pest = res, table = tab, messages = msgs)
+}
+
+#' Progress reporting through a small file, so a background R process can tell
+#' the Shiny session how far it has come.
+progress_writer <- function(path) function(fraction, text)
+  tryCatch(writeLines(c(format(round(fraction, 3)), text), path), error = function(e) NULL)
+progress_read <- function(path) {
+  x <- tryCatch(readLines(path, warn = FALSE), error = function(e) character(0))
+  if (length(x) < 2) return(NULL)
+  list(fraction = suppressWarnings(as.numeric(x[1])), text = x[2])
 }

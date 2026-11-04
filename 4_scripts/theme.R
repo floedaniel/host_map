@@ -63,6 +63,7 @@ hm_theme <- function(col = VKM_COLOURS) {
     table.dataTable.stripe tbody tr.odd > *, table.dataTable.display tbody tr.odd > * { box-shadow: inset 0 0 0 9999px %5$s; }
     table.dataTable tbody tr.selected > * { box-shadow: inset 0 0 0 9999px %4$s !important; color: %2$s !important; }
 
+    .hm-progress-bar { background: %5$s; } .hm-progress-fill { background: %6$s; }
     .vkm-footer { background: %5$s; }
     .leaflet-container { background: %1$s; }
   ", col$paper, col$ink, col$grey, col$hairline, col$mist, col$accent, col$caution)
