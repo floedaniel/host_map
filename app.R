@@ -207,14 +207,23 @@ server <- function(input, output, session) {
       `Status in Norwegian nature (Artsdatabanken)` = as.character(tab$ref_status),
       GBIF = ifelse(is.na(tab$gbif_link), "", sprintf('<a href="%s" target="_blank">GBIF</a>', tab$gbif_link)),
       Artskart = sprintf('<a href="%s" target="_blank">Artskart</a>', tab$artskart_link),
+      class_rank = as.integer(tab$uncertainty_class),   # hidden: sort key in class order
       check.names = FALSE)
   })
 
   output$tbl <- renderDT({
     d <- display_table()
+    rank_col <- which(names(d) == "class_rank") - 1L      # 0-based for DataTables
+    rec_col <- which(names(d) == "Records in Norway") - 1L
+    class_col <- which(names(d) == "Uncertainty class (documented occurrence)") - 1L
     datatable(d, escape = setdiff(seq_along(d), match(c("GBIF", "Artskart"), names(d))),
               filter = "top", rownames = FALSE, selection = "multiple",
-              class = "stripe hover", options = list(pageLength = 25, scrollX = TRUE, order = list(list(4, "desc")))) |>
+              class = "stripe hover",
+              options = list(pageLength = 25, scrollX = TRUE,
+                             # sorted by uncertainty class (low -> not documented), then by records
+                             order = list(list(rank_col, "desc"), list(rec_col, "desc")),
+                             columnDefs = list(list(visible = FALSE, targets = rank_col),
+                                               list(orderData = list(rank_col, rec_col), targets = class_col)))) |>
       formatStyle("Uncertainty class (documented occurrence)", fontWeight = "bold",
                   backgroundColor = styleEqual(names(uncertainty_fill()), unname(uncertainty_fill())))
   })

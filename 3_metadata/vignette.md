@@ -46,6 +46,8 @@ The uncertainty classes are calibrated against Artsdatabanken's lists (see `5_ou
 
 **Why the two concepts differ.** A plant can have low uncertainty for documented occurrence and still not be established. Crops are the typical case: oats, barley and potato have hundreds of Norwegian records but no wild populations. For a pest risk assessment, use the uncertainty class to judge whether the host is *there*, and the Artsdatabanken status to judge whether it occurs *in nature*.
 
+The table is sorted by uncertainty class (low first, then moderate, high and not documented), and by number of records within each class. Click a column header to sort differently.
+
 Use the column filters (e.g. type "Low" under Uncertainty class) and the **EPPO host categories** checkboxes in the sidebar to narrow the list. **Download CSV / Excel** exports the filtered table. The Excel file has a *settings* sheet with the pest, date and classification rule.
 
 ## 3. Map
