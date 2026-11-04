@@ -4,7 +4,7 @@
 #
 # Principle: white paper, black ink, very few colours. Colour only marks what
 # needs attention:
-#   olive   #B0AA00  the thin rule from the VKM logo; active tab; primary action
+#   green   #86B29C  VKM green (PMS 624c): rule under the pest name, active tab, primary action
 #   caution #F39800  warnings, and (as its 30% tint) hosts with uncertain records
 # Everything else is neutral greys from the VKM palette.
 # www/vkm.css holds the colour-free layout and type rules.
@@ -16,7 +16,7 @@ VKM_COLOURS <- list(
   grey      = "#626250",   # VKM logo grey: labels, secondary text, controls
   hairline  = "#CFCFCA",   # borders, dividers
   mist      = "#E9EBE8",   # table striping, footer
-  olive     = "#B0AA00",   # VKM logo rule: brand accent + primary action
+  accent    = "#86B29C",   # VKM green (PMS 624c): brand accent + primary action
   caution   = "#F39800",   # warnings
   caution30 = "#FBE0B2"    # VKM 30 % tint of caution: uncertain hosts
 )
@@ -26,10 +26,11 @@ hm_theme <- function(col = VKM_COLOURS) {
     body, .card, .accordion-item, .sidebar, .bslib-sidebar-layout > .sidebar,
     .vkm-header, .vkm-navbar, .vkm-navbar .navbar { background-color: %1$s !important; color: %2$s; }
 
-    .vkm-sep, .hm-rule { background: %6$s; }
+    .vkm-sep { background: %4$s; }
+    .hm-rule { background: %6$s; }
     .vkm-subtitle, .hm-meta, .hm-stat span, .sidebar .control-label, .small { color: %3$s !important; }
 
-    /* navigation: hairline under the bar, olive under the active tab */
+    /* navigation: hairline under the bar, green under the active tab */
     .vkm-navbar .navbar { border-bottom: 1px solid %4$s; }
     .vkm-navbar .nav-link { color: %2$s !important; }
     .vkm-navbar .nav-link:hover { background-color: %5$s; }
@@ -44,7 +45,7 @@ hm_theme <- function(col = VKM_COLOURS) {
     .shiny-input-container input[type=checkbox]:checked, .shiny-input-container input[type=radio]:checked { background-color: %3$s !important; border-color: %3$s !important; }
     .selectize-control.multi .selectize-input > div { background: %5$s; color: %2$s; border-radius: 4px; }
 
-    /* actions: olive = the one thing to press; everything else is quiet */
+    /* actions: green = the one thing to press; everything else is quiet */
     .btn.btn-primary { background-color: %6$s; border: 1px solid %2$s; color: %2$s; font-weight: 700; }
     .btn.btn-primary:hover, .btn.btn-primary:focus { background-color: %6$s; filter: brightness(1.06); color: %2$s; }
     .btn.btn-secondary, .btn-default:not(.btn-primary) { background-color: %1$s; border: 1px solid %4$s; color: %2$s; }
@@ -62,12 +63,12 @@ hm_theme <- function(col = VKM_COLOURS) {
 
     .vkm-footer { background: %5$s; }
     .leaflet-container { background: %1$s; }
-  ", col$paper, col$ink, col$grey, col$hairline, col$mist, col$olive, col$caution)
+  ", col$paper, col$ink, col$grey, col$hairline, col$mist, col$accent, col$caution)
 
   bslib::bs_theme(
     version = 5, bg = col$paper, fg = col$ink,
-    primary = col$olive, secondary = col$hairline,
-    success = col$olive, info = col$hairline, warning = col$caution, danger = col$caution,
+    primary = col$accent, secondary = col$hairline,
+    success = col$accent, info = col$hairline, warning = col$caution, danger = col$caution,
     light = col$mist, dark = col$ink,
     base_font = bslib::font_collection("Calibri", "Carlito", "Segoe UI", "sans-serif")
   ) |>
@@ -100,8 +101,8 @@ vkm_footer <- function(project = "FinnPRIO", name = "Daniel Flø", email = "Dani
     shiny::span("VKM"))
 }
 
-#' Pest heading: the species name is the page's headline, with the VKM olive
-#' rule under it (as in the logo) and one quiet line of counts.
+#' Pest heading: the species name is the page's headline, with a short VKM green
+#' rule under it and one quiet line of counts.
 hm_pest_heading <- function(name, norwegian = NA, code = NA, gbif_key = NA, n_hosts, n_doc, n_est) {
   meta <- c(if (!is.na(norwegian)) paste0("Norwegian: ", norwegian),
             if (!is.na(code)) paste0("EPPO code ", code),
