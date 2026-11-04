@@ -1,0 +1,20 @@
+/* VKM look: black text everywhere, layout. Colours are set in 4_scripts/theme.R */
+body, .btn, .navbar, .nav-link, .card-header, .badge, .alert,
+.bslib-value-box, .value-box-title, .value-box-value, .accordion-button,
+table.dataTable thead th, .vkm-footer, .vkm-header { color: #000 !important; }
+
+.vkm-header { display: flex; align-items: center; gap: 1.25rem; padding: 12px 24px; }
+.vkm-logo   { height: 60px; width: auto; margin: 4px 8px 4px 0; }
+.vkm-title h1 { font-size: 1.6rem; margin: 0; font-weight: 600; }
+.vkm-subtitle { font-size: 0.95rem; }
+.vkm-navbar .nav-link { font-weight: 500; }
+.vkm-footer { display: flex; justify-content: space-between; font-size: 0.8rem; padding: 8px 24px; }
+
+/* Generous white space */
+.vkm-header { padding: 20px 32px; }
+.bslib-sidebar-layout > .main { padding: 28px 32px !important; }
+.bslib-sidebar-layout > .sidebar > .sidebar-content { padding: 24px !important; gap: 1.25rem; }
+.bslib-value-box { margin-bottom: 1.5rem; }
+.vkm-footer { padding: 14px 32px; }
+.vkm-navbar .navbar { padding-left: 16px; }
+.alert { margin-bottom: 1rem; }

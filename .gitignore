@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+# API response cache (regenerated automatically)
+2_processed_data/cache/
+# never commit keys
+.Renviron
+*api_key*
+4_scripts/tests/_snaps/
