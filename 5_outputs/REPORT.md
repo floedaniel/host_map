@@ -38,7 +38,7 @@
   2. *Established in Norwegian nature* (established vs. all others). Three scenarios: A, all hosts with "not listed" counted as not established; B, only hosts with at least 1 record; C, listed hosts only.
 * **Comparison of rules.** Repeated stratified 5-fold cross-validation (10 × 5). Each rule's parameters were tuned on the training folds (maximising balanced accuracy) and scored on the held-out fold. Thresholds were estimated by logistic calibration on log10(count + 1), with 2,000 bootstrap resamples for CIs.
 
-Scripts: `4_scripts/01_validation_collect.R`, `4_scripts/02_validation_analysis.R`. All tables and figures are in `5_outputs/`.
+Scripts: `4_scripts/01_validation_collect.R`, `4_scripts/02_validation_analysis.R`. All tables and figures are in `5_outputs/`. A formatted copy of this report is `5_outputs/REPORT.html`.
 
 ## 3. Results
 
