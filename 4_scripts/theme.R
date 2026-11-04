@@ -6,7 +6,7 @@
 #   * ONE blue, and only on things you can click: buttons, active tab,
 #     checkboxes/radios, links, focus rings
 #   * very light blue only for hover and selection
-#   * data colours are separate: a grey gradient for the uncertainty column,
+#   * data colours are separate: a wellness green gradient for the uncertainty column,
 #     amber for warnings, viridis for map points
 # www/vkm.css holds the colour-free layout and type rules.
 # =============================================================================
@@ -20,10 +20,10 @@ HM_COLOURS <- list(
   blue      = "#2160D6",   # the accent: interactive elements only (white text on it: 5.3:1)
   blue_soft = "#EAF1FD",   # hover / selection
   amber     = "#B7791F",   # warnings (status colour, not an accent)
-  # uncertainty column: grey gradient, darker = better documented
-  grey_1    = "#EFEFEF",   # high uncertainty
-  grey_2    = "#DEDEDE",   # moderate uncertainty
-  grey_3    = "#C9C9C9"    # low uncertainty
+  # uncertainty column: wellness green gradient, stronger green = better documented
+  green_1   = "#B8DDB8",   # high uncertainty
+  green_2   = "#8FCA8F",   # moderate uncertainty
+  green_3   = "#5FA85F"    # low uncertainty
 )
 VKM_COLOURS <- HM_COLOURS   # backwards-compatible name used in app.R
 
@@ -63,6 +63,9 @@ hm_theme <- function(col = HM_COLOURS) {
 
     /* table */
     table.dataTable thead th { background-color: %1$s; color: %3$s; font-weight: 600; border-bottom: 1px solid %4$s !important; }
+    table.dataTable thead input.form-control,
+    table.dataTable thead select.form-select,
+    table.dataTable thead .selectize-input { background: %1$s !important; color: %2$s !important; border-color: %4$s !important; }
     table.dataTable tbody td { border-top: 1px solid %4$s !important; }
     table.dataTable { --bs-table-striped-bg: %5$s; --bs-table-hover-bg: %7$s; --bs-table-active-bg: %7$s; --dt-row-stripe: 0, 0, 0; }
     table.dataTable.stripe tbody tr.odd > *, table.dataTable.display tbody tr.odd > *,
@@ -131,13 +134,13 @@ hm_pest_heading <- function(name, norwegian = NA, code = NA, gbif_key = NA, n_ho
       stat(n_est, "established in Norway (Artsdatabanken)")))
 }
 
-#' Uncertainty column: one grey gradient. Darker grey = better documented;
+#' Uncertainty column: wellness green gradient. Stronger green = better documented;
 #' not documented = no fill. (Blue is kept for interactive elements.)
 uncertainty_fill <- function(col = HM_COLOURS) {
   c("Not documented in Norway" = col$paper,
-    "High uncertainty"         = col$grey_1,
-    "Moderate uncertainty"     = col$grey_2,
-    "Low uncertainty"          = col$grey_3)
+    "High uncertainty"         = col$green_1,
+    "Moderate uncertainty"     = col$green_2,
+    "Low uncertainty"          = col$green_3)
 }
 
 #' HTML legend for the map: one row per class with a colour dot, label and count.

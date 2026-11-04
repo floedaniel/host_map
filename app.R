@@ -268,11 +268,7 @@ server <- function(input, output, session) {
                              # sorted by uncertainty class (low -> not documented), then by records
                              order = list(list(rank_col, "desc"), list(rec_col, "desc")),
                              columnDefs = list(list(visible = FALSE, targets = rank_col),
-                                               list(orderData = list(rank_col, rec_col), targets = class_col)))) |>
-      formatStyle("Uncertainty class (documented occurrence)", fontWeight = "bold",
-                  backgroundColor = styleEqual(names(uncertainty_fill()), unname(uncertainty_fill())),
-                  # DataTables paints rows with an inset shadow; paint the class shade the same way so it wins
-                  boxShadow = styleEqual(names(uncertainty_fill()), sprintf("inset 0 0 0 9999px %s", unname(uncertainty_fill()))))
+                                               list(orderData = list(rank_col, rec_col), targets = class_col))))
   })
 
   export_table <- reactive({
