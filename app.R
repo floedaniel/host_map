@@ -62,6 +62,9 @@ library(shiny)
 library(bslib)
 library(DT)
 library(leaflet)
+# Packages used only indirectly (includeMarkdown, background searches). Listed
+# here so deployment tools (rsconnect, renv) see them and install them.
+if (FALSE) { library(markdown); library(future); library(promises); library(viridisLite) }
 FUNCTIONS_FILE <- normalizePath("4_scripts/hostmap_functions.R")
 source(FUNCTIONS_FILE)
 source("4_scripts/theme.R")
@@ -96,7 +99,7 @@ ui <- page(
   tags$head(tags$link(rel = "stylesheet", href = "vkm.css")),
   vkm_header("Host Map", "Host plants of plant pests and how well they are documented in Norway"),
   div(class = "vkm-navbar", navset_bar(id = "tabs", fillable = FALSE,
-  sidebar = sidebar(width = 300, bg = VKM_COLOURS$paper,
+  sidebar = sidebar(width = 300, bg = HM_COLOURS$paper,
     textInput("pest", "Pest species (scientific name or EPPO code)", "", placeholder = "Species"),
     input_task_button("go", "Search", label_busy = "Searching\u2026", class = "btn-primary w-100", type = "primary"),
     checkboxGroupInput("cats", "EPPO host categories", choices = NULL),
@@ -267,7 +270,9 @@ server <- function(input, output, session) {
                              columnDefs = list(list(visible = FALSE, targets = rank_col),
                                                list(orderData = list(rank_col, rec_col), targets = class_col)))) |>
       formatStyle("Uncertainty class (documented occurrence)", fontWeight = "bold",
-                  backgroundColor = styleEqual(names(uncertainty_fill()), unname(uncertainty_fill())))
+                  backgroundColor = styleEqual(names(uncertainty_fill()), unname(uncertainty_fill())),
+                  # DataTables paints rows with an inset shadow; paint the class shade the same way so it wins
+                  boxShadow = styleEqual(names(uncertainty_fill()), sprintf("inset 0 0 0 9999px %s", unname(uncertainty_fill()))))
   })
 
   export_table <- reactive({

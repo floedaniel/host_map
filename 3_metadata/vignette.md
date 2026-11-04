@@ -29,7 +29,7 @@ Each row is one EPPO host. The columns:
 | **Status in Norwegian nature** | Artsdatabanken's assessment of whether it is **established** |
 | GBIF, Artskart | Links to the records |
 
-The uncertainty column is shaded as one green gradient: the stronger the green, the better documented the host is in Norway. The classes are calibrated against Artsdatabanken's lists (see `5_outputs/REPORT.md`):
+The uncertainty column is shaded as one grey gradient: the darker the grey, the better documented the host is in Norway. The classes are calibrated against Artsdatabanken's lists (see `5_outputs/REPORT.md`):
 
 | Class | Records | Of such hosts, share actually absent from Norway |
 |---|---|---|

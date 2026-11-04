@@ -1,14 +1,13 @@
-/* Host Map layout and type. Colours are set in 4_scripts/theme.R. */
+/* Host Map layout and type. All colours are set in 4_scripts/theme.R. */
 
-/* type: Calibri (VKM web font); one family, a clear scale */
-body { font-size: 15px; line-height: 1.5; color: #000; }
-.btn, .navbar, .nav-link, .card-header, .badge, .alert { color: #000 !important; }
+/* type: the system UI font, one family, a clear scale */
+body { font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased; }
 
 /* header: logo | divider | app name */
 .vkm-header   { display: flex; align-items: center; gap: 20px; flex-wrap: wrap; padding: 18px 28px 14px; }
-.vkm-logo     { height: 58px; width: auto; display: block; }
-.vkm-sep      { width: 1px; height: 44px; }
-.vkm-t        { font-size: 22px; font-weight: 700; line-height: 1.2; }
+.vkm-logo     { height: 44px; width: auto; display: block; }
+.vkm-sep      { width: 1px; height: 36px; }
+.vkm-t        { font-size: 20px; font-weight: 600; line-height: 1.2; }
 .vkm-subtitle { font-size: 13px; }
 
 /* navigation */
@@ -16,23 +15,23 @@ body { font-size: 15px; line-height: 1.5; color: #000; }
 .vkm-navbar .navbar .container-fluid { padding: 0; }
 .vkm-navbar .navbar-nav { gap: 4px; }
 .vkm-navbar .nav-link { display: block; padding: 12px 18px 10px !important; margin: 0 !important; border: 0 !important;
-                        font-size: 16px; font-weight: 400 !important; border-radius: 4px 4px 0 0; }
+                        font-size: 15px; font-weight: 500 !important; border-radius: 6px 6px 0 0; }
 
 /* sidebar and main */
 .bslib-sidebar-layout > .sidebar > .sidebar-content { padding: 24px 22px 24px 28px !important; gap: 8px; }
 .sidebar .control-label, .sidebar label.form-label { font-size: 13px; margin-top: 8px; }
-.form-control, .form-select { border-radius: 4px; padding: 8px 10px; font-size: 14px; }
-.sidebar .btn { border-radius: 4px; padding: 9px; margin-top: 6px; }
+.form-control, .form-select { border-radius: 6px; padding: 8px 10px; font-size: 14px; }
+.sidebar .btn { border-radius: 6px; padding: 9px; margin-top: 6px; }
 .sidebar .btn.btn-primary { margin-top: 14px; padding: 10px; }
 .bslib-sidebar-layout > .main { padding: 24px 32px !important; gap: 18px; }
 
 /* pest heading: the one bold element */
 .hm-pest      { margin: 4px 0 6px; }
-.hm-pest-name { font-size: 34px; font-weight: 700; font-style: italic; line-height: 1.1; margin: 0; }
+.hm-pest-name { font-size: 30px; font-weight: 600; font-style: italic; line-height: 1.15; margin: 0; letter-spacing: -.01em; }
 .hm-meta      { font-size: 13px; margin-top: 6px; }
-.hm-rule      { width: 72px; height: 3px; margin: 14px 0; }
+.hm-stats     { margin-top: 14px; }
 .hm-stats     { display: flex; flex-wrap: wrap; gap: 8px 36px; }
-.hm-stat b    { font-size: 22px; font-weight: 700; margin-right: 6px; font-variant-numeric: tabular-nums; }
+.hm-stat b    { font-size: 20px; font-weight: 600; margin-right: 6px; font-variant-numeric: tabular-nums; }
 .hm-stat span { font-size: 14px; }
 
 /* search progress (background search) */
@@ -49,17 +48,16 @@ body { font-size: 15px; line-height: 1.5; color: #000; }
 table.dataTable { font-size: 14px; }
 
 /* map legend */
-.leaflet-control.hm-legend { background: #fff; padding: 10px 12px; border-radius: 4px; box-shadow: 0 1px 3px rgba(0,0,0,.25);
-  font-size: 13px; line-height: 1.35; max-width: 320px; color: #000; }
-.hm-leg-title { font-weight: 700; margin-bottom: 6px; }
+.leaflet-control.hm-legend { background: #fff; padding: 10px 12px; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,.2);
+  font-size: 13px; line-height: 1.35; max-width: 320px; color: #2B2F36; }
+.hm-leg-title { font-weight: 600; margin-bottom: 6px; }
 .hm-leg-row   { display: flex; align-items: center; gap: 8px; padding: 2px 0; }
-.hm-leg-dot   { width: 12px; height: 12px; border-radius: 50%; border: 1px solid #000; flex: 0 0 12px; }
+.hm-leg-dot   { width: 11px; height: 11px; border-radius: 50%; border: 1px solid rgba(0,0,0,.45); flex: 0 0 11px; }
 .hm-leg-lab   { flex: 1 1 auto; }
 .hm-leg-n     { opacity: .7; font-variant-numeric: tabular-nums; }
 
 /* footer */
 .vkm-footer   { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; font-size: 13px; padding: 12px 28px; }
-.vkm-footer a { color: #000; }
 
 @media (max-width: 768px) {
   .vkm-header { padding: 12px 16px; }
